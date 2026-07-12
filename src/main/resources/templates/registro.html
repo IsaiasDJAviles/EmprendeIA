@@ -1,0 +1,41 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <title>Crear cuenta - EmprendeIA</title>
+</head>
+<body>
+<h1>Crear cuenta</h1>
+
+<form th:action="@{/registro}" th:object="${registroForm}" method="post">
+    <div>
+        <label for="nombre">Nombre</label>
+        <input type="text" id="nombre" th:field="*{nombre}">
+        <p th:if="${#fields.hasErrors('nombre')}" th:errors="*{nombre}"></p>
+    </div>
+    <div>
+        <label for="apellidoPaterno">Apellido paterno</label>
+        <input type="text" id="apellidoPaterno" th:field="*{apellidoPaterno}">
+        <p th:if="${#fields.hasErrors('apellidoPaterno')}" th:errors="*{apellidoPaterno}"></p>
+    </div>
+    <div>
+        <label for="apellidoMaterno">Apellido materno</label>
+        <input type="text" id="apellidoMaterno" th:field="*{apellidoMaterno}">
+        <p th:if="${#fields.hasErrors('apellidoMaterno')}" th:errors="*{apellidoMaterno}"></p>
+    </div>
+    <div>
+        <label for="correo">Correo</label>
+        <input type="email" id="correo" th:field="*{correo}">
+        <p th:if="${#fields.hasErrors('correo')}" th:errors="*{correo}"></p>
+    </div>
+    <div>
+        <label for="contrasena">Contraseña</label>
+        <input type="password" id="contrasena" th:field="*{contrasena}">
+        <p th:if="${#fields.hasErrors('contrasena')}" th:errors="*{contrasena}"></p>
+    </div>
+    <button type="submit">Registrarme</button>
+</form>
+
+<p><a th:href="@{/login}">Ya tengo cuenta</a></p>
+</body>
+</html>

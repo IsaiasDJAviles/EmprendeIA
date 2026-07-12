@@ -1,0 +1,60 @@
+package com.emprendeia.security;
+
+import java.util.Collection;
+import java.util.List;
+
+import org.springframework.security.core.GrantedAuthority;
+import org.springframework.security.core.authority.SimpleGrantedAuthority;
+import org.springframework.security.core.userdetails.UserDetails;
+
+import com.emprendeia.model.Usuario;
+
+public class UsuarioPrincipal implements UserDetails {
+
+    private static final String ESTATUS_ACTIVO = "ACTIVO";
+
+    private final Usuario usuario;
+
+    public UsuarioPrincipal(Usuario usuario) {
+        this.usuario = usuario;
+    }
+
+    public Usuario getUsuario() {
+        return usuario;
+    }
+
+    @Override
+    public Collection<? extends GrantedAuthority> getAuthorities() {
+        return List.of(new SimpleGrantedAuthority("ROLE_USER"));
+    }
+
+    @Override
+    public String getPassword() {
+        return usuario.getContrasena();
+    }
+
+    @Override
+    public String getUsername() {
+        return usuario.getCorreo();
+    }
+
+    @Override
+    public boolean isAccountNonExpired() {
+        return true;
+    }
+
+    @Override
+    public boolean isAccountNonLocked() {
+        return true;
+    }
+
+    @Override
+    public boolean isCredentialsNonExpired() {
+        return true;
+    }
+
+    @Override
+    public boolean isEnabled() {
+        return ESTATUS_ACTIVO.equals(usuario.getEstatus().getNombreEstatus());
+    }
+}
