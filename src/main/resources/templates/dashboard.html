@@ -1,0 +1,39 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <title>Mis ideas - EmprendeIA</title>
+</head>
+<body>
+<h1>Mis ideas de negocio</h1>
+
+<p th:if="${param.error}">La idea solicitada no existe o no te pertenece.</p>
+
+<p><a th:href="@{/ideas/nueva}">+ Nueva idea</a></p>
+
+<p th:if="${#lists.isEmpty(ideas)}">Todavía no tienes ideas registradas.</p>
+
+<table th:unless="${#lists.isEmpty(ideas)}">
+    <thead>
+    <tr>
+        <th>Nombre</th>
+        <th>Sector</th>
+        <th>Nivel de avance</th>
+        <th></th>
+    </tr>
+    </thead>
+    <tbody>
+    <tr th:each="idea : ${ideas}">
+        <td th:text="${idea.nombreNegocio}"></td>
+        <td th:text="${idea.sectorMercado}"></td>
+        <td th:text="${idea.nivelAvance}"></td>
+        <td><a th:href="@{/ideas/{id}/formulario(id=${idea.id})}">Formulario guiado</a></td>
+    </tr>
+    </tbody>
+</table>
+
+<form th:action="@{/logout}" method="post">
+    <button type="submit">Cerrar sesión</button>
+</form>
+</body>
+</html>

@@ -11,7 +11,6 @@ import jakarta.persistence.GeneratedValue;
 import jakarta.persistence.GenerationType;
 import jakarta.persistence.Id;
 import jakarta.persistence.JoinColumn;
-import jakarta.persistence.Lob;
 import jakarta.persistence.ManyToOne;
 import jakarta.persistence.Table;
 
@@ -32,12 +31,10 @@ public class AnalisisGenerado {
      * Salida estructurada del LLM en formato JSON serializado como texto.
      * La deserialización a objetos Java ocurre en la capa de servicio (Jackson), no aquí.
      */
-    @Lob
-    @Column(name = "contenido", nullable = false)
+    @Column(name = "contenido", nullable = false, columnDefinition = "TEXT")
     private String contenido;
 
-    @Lob
-    @Column(name = "prompt_completo")
+    @Column(name = "prompt_completo", columnDefinition = "TEXT")
     private String promptCompleto;
 
     @Column(name = "fecha_generacion", nullable = false)

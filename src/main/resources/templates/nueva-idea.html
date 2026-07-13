@@ -1,0 +1,59 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <title>Nueva idea - EmprendeIA</title>
+</head>
+<body>
+<h1>Nueva idea de negocio</h1>
+
+<form th:action="@{/ideas/nueva}" th:object="${ideaForm}" method="post">
+    <div>
+        <label for="nombreNegocio">Nombre del negocio</label>
+        <input type="text" id="nombreNegocio" th:field="*{nombreNegocio}">
+        <p th:if="${#fields.hasErrors('nombreNegocio')}" th:errors="*{nombreNegocio}"></p>
+    </div>
+    <div>
+        <label for="descripcion">Descripción</label>
+        <textarea id="descripcion" th:field="*{descripcion}"></textarea>
+        <p th:if="${#fields.hasErrors('descripcion')}" th:errors="*{descripcion}"></p>
+    </div>
+    <div>
+        <label for="problema">Problema que resuelve</label>
+        <textarea id="problema" th:field="*{problema}"></textarea>
+        <p th:if="${#fields.hasErrors('problema')}" th:errors="*{problema}"></p>
+    </div>
+    <div>
+        <label for="sectorMercado">Sector / mercado</label>
+        <input type="text" id="sectorMercado" th:field="*{sectorMercado}">
+        <p th:if="${#fields.hasErrors('sectorMercado')}" th:errors="*{sectorMercado}"></p>
+    </div>
+    <div>
+        <label for="clienteObjetivo">Cliente objetivo</label>
+        <input type="text" id="clienteObjetivo" th:field="*{clienteObjetivo}">
+        <p th:if="${#fields.hasErrors('clienteObjetivo')}" th:errors="*{clienteObjetivo}"></p>
+    </div>
+    <div>
+        <label for="tipoOferta">Tipo de oferta</label>
+        <input type="text" id="tipoOferta" th:field="*{tipoOferta}">
+        <p th:if="${#fields.hasErrors('tipoOferta')}" th:errors="*{tipoOferta}"></p>
+    </div>
+    <div>
+        <label for="nivelAvance">Nivel de avance</label>
+        <input type="text" id="nivelAvance" th:field="*{nivelAvance}">
+        <p th:if="${#fields.hasErrors('nivelAvance')}" th:errors="*{nivelAvance}"></p>
+    </div>
+    <div>
+        <label for="idEstado">Estado</label>
+        <select id="idEstado" th:field="*{idEstado}">
+            <option value="">-- Selecciona --</option>
+            <option th:each="estado : ${estados}" th:value="${estado.id}" th:text="${estado.nombreEstado}"></option>
+        </select>
+        <p th:if="${#fields.hasErrors('idEstado')}" th:errors="*{idEstado}"></p>
+    </div>
+    <button type="submit">Crear idea</button>
+</form>
+
+<p><a th:href="@{/dashboard}">Cancelar</a></p>
+</body>
+</html>

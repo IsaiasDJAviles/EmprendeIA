@@ -1,0 +1,46 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <title>Formulario guiado - EmprendeIA</title>
+</head>
+<body>
+<h1>Formulario guiado</h1>
+
+<form th:action="@{/ideas/{id}/formulario(id=${ideaId})}" th:object="${formularioForm}" method="post">
+    <div>
+        <label for="inversionInicial">Inversión inicial</label>
+        <input type="number" step="0.01" id="inversionInicial" th:field="*{inversionInicial}">
+        <p th:if="${#fields.hasErrors('inversionInicial')}" th:errors="*{inversionInicial}"></p>
+    </div>
+    <div>
+        <label for="costosFijos">Costos fijos</label>
+        <input type="number" step="0.01" id="costosFijos" th:field="*{costosFijos}">
+        <p th:if="${#fields.hasErrors('costosFijos')}" th:errors="*{costosFijos}"></p>
+    </div>
+    <div>
+        <label for="costosVariables">Costos variables</label>
+        <input type="number" step="0.01" id="costosVariables" th:field="*{costosVariables}">
+        <p th:if="${#fields.hasErrors('costosVariables')}" th:errors="*{costosVariables}"></p>
+    </div>
+    <div>
+        <label for="precioVenta">Precio de venta</label>
+        <input type="number" step="0.01" id="precioVenta" th:field="*{precioVenta}">
+        <p th:if="${#fields.hasErrors('precioVenta')}" th:errors="*{precioVenta}"></p>
+    </div>
+    <div>
+        <label for="unidadesEstimadas">Unidades estimadas</label>
+        <input type="number" id="unidadesEstimadas" th:field="*{unidadesEstimadas}">
+        <p th:if="${#fields.hasErrors('unidadesEstimadas')}" th:errors="*{unidadesEstimadas}"></p>
+    </div>
+    <div>
+        <label for="destinoInversion">Destino de la inversión</label>
+        <textarea id="destinoInversion" th:field="*{destinoInversion}"></textarea>
+        <p th:if="${#fields.hasErrors('destinoInversion')}" th:errors="*{destinoInversion}"></p>
+    </div>
+    <button type="submit">Guardar</button>
+</form>
+
+<p><a th:href="@{/dashboard}">Volver</a></p>
+</body>
+</html>

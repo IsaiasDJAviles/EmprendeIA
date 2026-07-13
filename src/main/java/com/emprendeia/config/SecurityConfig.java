@@ -45,7 +45,7 @@ public class SecurityConfig {
                         .usernameParameter("correo")
                         .passwordParameter("contrasena")
                         .failureUrl("/login?error")
-                        .defaultSuccessUrl("/", false)
+                        .defaultSuccessUrl("/dashboard", false)
                         .permitAll())
                 .logout(logout -> logout
                         .logoutUrl("/logout")
