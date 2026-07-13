@@ -2,38 +2,48 @@
 <html xmlns:th="http://www.thymeleaf.org">
 <head>
     <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
     <title>Mis ideas - EmprendeIA</title>
+    <link rel="stylesheet" th:href="@{/css/styles.css}">
 </head>
 <body>
-<h1>Mis ideas de negocio</h1>
+<div th:replace="~{fragments/nav :: nav}"></div>
 
-<p th:if="${param.error}">La idea solicitada no existe o no te pertenece.</p>
+<div class="page">
+    <div class="page-header">
+        <div>
+            <h1>Mis ideas de negocio</h1>
+            <p>Ideas registradas con tu cuenta</p>
+        </div>
+        <a class="btn btn-primary" th:href="@{/ideas/nueva}">+ Nueva idea</a>
+    </div>
 
-<p><a th:href="@{/ideas/nueva}">+ Nueva idea</a></p>
+    <p class="alert alert-error" th:if="${param.error}">La idea solicitada no existe o no te pertenece.</p>
 
-<p th:if="${#lists.isEmpty(ideas)}">Todavía no tienes ideas registradas.</p>
+    <div class="empty-state" th:if="${#lists.isEmpty(ideas)}">
+        Todavía no tienes ideas registradas. <a th:href="@{/ideas/nueva}">Crea la primera</a>.
+    </div>
 
-<table th:unless="${#lists.isEmpty(ideas)}">
-    <thead>
-    <tr>
-        <th>Nombre</th>
-        <th>Sector</th>
-        <th>Nivel de avance</th>
-        <th></th>
-    </tr>
-    </thead>
-    <tbody>
-    <tr th:each="idea : ${ideas}">
-        <td th:text="${idea.nombreNegocio}"></td>
-        <td th:text="${idea.sectorMercado}"></td>
-        <td th:text="${idea.nivelAvance}"></td>
-        <td><a th:href="@{/ideas/{id}/formulario(id=${idea.id})}">Formulario guiado</a></td>
-    </tr>
-    </tbody>
-</table>
-
-<form th:action="@{/logout}" method="post">
-    <button type="submit">Cerrar sesión</button>
-</form>
+    <div class="table-wrap" th:unless="${#lists.isEmpty(ideas)}">
+        <table>
+            <thead>
+            <tr>
+                <th>Nombre</th>
+                <th>Sector</th>
+                <th>Nivel de avance</th>
+                <th></th>
+            </tr>
+            </thead>
+            <tbody>
+            <tr th:each="idea : ${ideas}">
+                <td th:text="${idea.nombreNegocio}"></td>
+                <td th:text="${idea.sectorMercado}"></td>
+                <td th:text="${idea.nivelAvance}"></td>
+                <td><a th:href="@{/ideas/{id}/formulario(id=${idea.id})}">Formulario guiado →</a></td>
+            </tr>
+            </tbody>
+        </table>
+    </div>
+</div>
 </body>
 </html>

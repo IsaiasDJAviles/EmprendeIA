@@ -1,0 +1,324 @@
+:root {
+    --c-black: #000000;
+    --c-bg: #101010;
+    --c-surface: #202020;
+    --c-surface-alt: #303030;
+    --c-border: #505050;
+    --c-muted: #909090;
+    --c-white: #ffffff;
+    --c-accent: #c02010;
+    --c-accent-hover: #dc3020;
+
+    --radius: 8px;
+    --space-1: 0.5rem;
+    --space-2: 1rem;
+    --space-3: 1.5rem;
+    --space-4: 2rem;
+}
+
+* {
+    box-sizing: border-box;
+}
+
+body {
+    margin: 0;
+    background: var(--c-bg);
+    color: var(--c-white);
+    font-family: "Segoe UI", system-ui, -apple-system, Roboto, Helvetica, Arial, sans-serif;
+    line-height: 1.5;
+}
+
+h1, h2, h3 {
+    margin: 0 0 var(--space-2);
+    font-weight: 600;
+}
+
+p {
+    margin: 0 0 var(--space-2);
+}
+
+a {
+    color: var(--c-accent-hover);
+    text-decoration: none;
+}
+
+a:hover {
+    text-decoration: underline;
+}
+
+/* ---------- Cabecera / navegación (páginas autenticadas) ---------- */
+
+.app-header {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    gap: var(--space-2);
+    padding: var(--space-2) var(--space-4);
+    background: var(--c-surface);
+    border-bottom: 1px solid var(--c-border);
+}
+
+.app-brand {
+    display: flex;
+    align-items: center;
+    gap: 0.5rem;
+    font-size: 1.15rem;
+    font-weight: 700;
+    color: var(--c-white);
+}
+
+.app-brand::before {
+    content: "";
+    display: inline-block;
+    width: 0.65rem;
+    height: 0.65rem;
+    border-radius: 50%;
+    background: var(--c-accent);
+}
+
+.app-nav {
+    display: flex;
+    align-items: center;
+    gap: var(--space-3);
+}
+
+.app-nav a {
+    color: var(--c-muted);
+    font-weight: 500;
+}
+
+.app-nav a:hover {
+    color: var(--c-white);
+    text-decoration: none;
+}
+
+.app-nav form {
+    margin: 0;
+}
+
+/* ---------- Layout general ---------- */
+
+.page {
+    max-width: 880px;
+    margin: 0 auto;
+    padding: var(--space-4) var(--space-2);
+}
+
+.page-header {
+    display: flex;
+    align-items: baseline;
+    justify-content: space-between;
+    gap: var(--space-2);
+    margin-bottom: var(--space-3);
+    flex-wrap: wrap;
+}
+
+.page-header p {
+    color: var(--c-muted);
+    margin: 0;
+}
+
+.auth-shell {
+    min-height: 100vh;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    padding: var(--space-2);
+}
+
+.auth-card {
+    width: 100%;
+    max-width: 380px;
+    background: var(--c-surface);
+    border: 1px solid var(--c-border);
+    border-radius: var(--radius);
+    padding: var(--space-4);
+}
+
+.auth-card .app-brand {
+    justify-content: center;
+    margin-bottom: var(--space-1);
+    font-size: 1.35rem;
+}
+
+.auth-subtitle {
+    text-align: center;
+    color: var(--c-muted);
+    margin-bottom: var(--space-3);
+}
+
+.auth-card form {
+    margin-bottom: var(--space-2);
+}
+
+.auth-footer {
+    text-align: center;
+    color: var(--c-muted);
+    margin: 0;
+}
+
+/* ---------- Tarjetas / formularios ---------- */
+
+.card {
+    background: var(--c-surface);
+    border: 1px solid var(--c-border);
+    border-radius: var(--radius);
+    padding: var(--space-3);
+}
+
+.form-group {
+    margin-bottom: var(--space-2);
+}
+
+label {
+    display: block;
+    margin-bottom: 0.35rem;
+    font-size: 0.9rem;
+    font-weight: 600;
+    color: var(--c-muted);
+}
+
+input[type="text"],
+input[type="email"],
+input[type="password"],
+input[type="number"],
+textarea,
+select {
+    width: 100%;
+    padding: 0.55rem 0.7rem;
+    background: var(--c-surface-alt);
+    border: 1px solid var(--c-border);
+    border-radius: var(--radius);
+    color: var(--c-white);
+    font-size: 1rem;
+    font-family: inherit;
+}
+
+textarea {
+    min-height: 5rem;
+    resize: vertical;
+}
+
+input:focus,
+textarea:focus,
+select:focus {
+    outline: none;
+    border-color: var(--c-accent-hover);
+    box-shadow: 0 0 0 3px rgba(220, 48, 32, 0.25);
+}
+
+.field-error {
+    color: var(--c-accent-hover);
+    font-size: 0.85rem;
+    margin: 0.35rem 0 0;
+}
+
+.form-actions {
+    display: flex;
+    align-items: center;
+    gap: var(--space-2);
+    margin-top: var(--space-3);
+}
+
+/* ---------- Botones ---------- */
+
+.btn {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    padding: 0.6rem 1.1rem;
+    border-radius: var(--radius);
+    border: 1px solid transparent;
+    font-size: 1rem;
+    font-weight: 600;
+    cursor: pointer;
+    font-family: inherit;
+}
+
+.btn-primary {
+    background: var(--c-accent);
+    color: var(--c-white);
+}
+
+.btn-primary:hover {
+    background: var(--c-accent-hover);
+    text-decoration: none;
+}
+
+.btn-secondary {
+    background: transparent;
+    color: var(--c-white);
+    border-color: var(--c-border);
+}
+
+.btn-secondary:hover {
+    border-color: var(--c-muted);
+    text-decoration: none;
+}
+
+.btn-block {
+    width: 100%;
+}
+
+/* ---------- Alertas ---------- */
+
+.alert {
+    padding: 0.75rem var(--space-2);
+    border-radius: var(--radius);
+    border-left: 4px solid var(--c-muted);
+    background: var(--c-surface);
+    margin-bottom: var(--space-2);
+}
+
+.alert-error {
+    border-left-color: var(--c-accent);
+    background: rgba(192, 32, 16, 0.12);
+}
+
+.alert-info {
+    border-left-color: var(--c-muted);
+}
+
+/* ---------- Tabla de ideas ---------- */
+
+.table-wrap {
+    background: var(--c-surface);
+    border: 1px solid var(--c-border);
+    border-radius: var(--radius);
+    overflow: hidden;
+}
+
+table {
+    width: 100%;
+    border-collapse: collapse;
+}
+
+th, td {
+    text-align: left;
+    padding: 0.75rem var(--space-2);
+}
+
+thead th {
+    color: var(--c-muted);
+    font-size: 0.8rem;
+    text-transform: uppercase;
+    letter-spacing: 0.04em;
+    border-bottom: 1px solid var(--c-border);
+}
+
+tbody tr:not(:last-child) td {
+    border-bottom: 1px solid var(--c-surface-alt);
+}
+
+tbody tr:hover {
+    background: var(--c-surface-alt);
+}
+
+.empty-state {
+    text-align: center;
+    color: var(--c-muted);
+    padding: var(--space-4);
+    background: var(--c-surface);
+    border: 1px dashed var(--c-border);
+    border-radius: var(--radius);
+}
