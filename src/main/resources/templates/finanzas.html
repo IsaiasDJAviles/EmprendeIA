@@ -1,0 +1,91 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <title>Finanzas - EmprendeIA</title>
+    <link rel="stylesheet" th:href="@{/css/styles.css}">
+</head>
+<body>
+<div th:replace="~{fragments/nav :: nav}"></div>
+
+<div class="page">
+    <div class="page-header">
+        <div>
+            <h1>Finanzas</h1>
+            <p>Cálculo de ingresos, costos, utilidad y punto de equilibrio a partir de tu formulario guiado.</p>
+        </div>
+        <a class="btn btn-secondary" th:href="@{/dashboard}">Volver</a>
+    </div>
+
+    <p class="alert alert-info">
+        Este análisis financiero es una <strong>estimación</strong> calculada a partir de los datos que capturaste
+        en el formulario guiado. No constituye asesoría financiera profesional ni garantiza resultados reales.
+    </p>
+
+    <p class="alert alert-error" th:if="${param.error != null and param.error[0] == 'datos'}">
+        No se pudo calcular: revisa los datos de tu formulario guiado (¿unidades estimadas en cero, o el precio de
+        venta no cubre el costo variable por unidad?).
+    </p>
+    <p class="alert alert-error" th:if="${param.error != null and param.error[0] == 'ia'}">
+        Tus finanzas se calcularon y guardaron correctamente, pero no se pudo generar la interpretación de IA.
+        Puedes reintentarla desde el botón de abajo.
+    </p>
+
+    <div class="empty-state" th:unless="${formularioCompleto}">
+        Todavía no completas el formulario guiado de esta idea.
+        <a th:href="@{/ideas/{id}/formulario(id=${ideaId})}">Complétalo primero</a>.
+    </div>
+
+    <div th:if="${formularioCompleto}">
+        <p class="alert alert-error" th:if="${margenError}" th:text="${margenError}"></p>
+
+        <div class="card" th:if="${resultado != null}">
+            <h2>Margen de contribución (informativo)</h2>
+            <p>
+                Por unidad: <strong th:text="${resultado.margenContribucionUnitario}"></strong> —
+                Porcentual: <strong th:text="${#numbers.formatPercent(resultado.margenContribucionPorcentual, 1, 1)}"></strong>
+            </p>
+        </div>
+
+        <div class="card" style="margin-top: 1rem;">
+            <form method="post" th:action="@{/ideas/{id}/finanzas/calcular(id=${ideaId})}">
+                <button type="submit" class="btn btn-primary"
+                        th:text="${modulo != null} ? 'Recalcular finanzas' : 'Calcular finanzas'"></button>
+            </form>
+        </div>
+
+        <div class="card" style="margin-top: 1rem;" th:if="${modulo != null}">
+            <h2>Resultado guardado</h2>
+            <table>
+                <tbody>
+                <tr>
+                    <th>Ingresos estimados</th>
+                    <td th:text="${modulo.ingresosEstimados}"></td>
+                </tr>
+                <tr>
+                    <th>Costos totales</th>
+                    <td th:text="${modulo.costosTotales}"></td>
+                </tr>
+                <tr>
+                    <th>Costos variables</th>
+                    <td th:text="${modulo.costosVariables}"></td>
+                </tr>
+                <tr>
+                    <th>Utilidad</th>
+                    <td th:text="${modulo.utilidad}"></td>
+                </tr>
+                <tr>
+                    <th>Punto de equilibrio ($)</th>
+                    <td th:text="${modulo.puntoEquilibrio}"></td>
+                </tr>
+                </tbody>
+            </table>
+            <p style="margin-top: 1rem;">
+                <a th:href="@{/ideas/{id}/analisis/mercado(id=${ideaId})}">Ver interpretación de IA →</a>
+            </p>
+        </div>
+    </div>
+</div>
+</body>
+</html>

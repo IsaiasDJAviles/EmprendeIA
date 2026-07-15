@@ -7,23 +7,14 @@ import jakarta.validation.constraints.NotBlank;
 import jakarta.validation.constraints.NotEmpty;
 
 /**
- * Pese al nombre del módulo ({@link com.emprendeia.model.TipoAnalisis#MERCADO}), el contenido
- * es la interpretación financiera del {@link com.emprendeia.model.Formulario} (ver decisión
- * documentada en {@link com.emprendeia.ia.PromptBuilder}), no un análisis de mercado.
+ * Interpretación de viabilidad del LLM sobre cifras ya calculadas en Java (RF-13);
+ * ver decisión documentada en {@link com.emprendeia.ia.PromptBuilder}. Los números en sí
+ * viven en {@link com.emprendeia.model.ModuloFinanciero}, no en este formulario.
  */
 public class MercadoForm {
 
     @NotBlank
-    private String ingresosEstimados;
-
-    @NotBlank
-    private String costosPrincipales;
-
-    @NotBlank
-    private String utilidadAproximada;
-
-    @NotBlank
-    private String puntoEquilibrio;
+    private String interpretacionGeneral;
 
     @NotEmpty
     private List<String> riesgosFinancieros = new ArrayList<>();
@@ -31,36 +22,12 @@ public class MercadoForm {
     @NotEmpty
     private List<String> recomendacionesViabilidad = new ArrayList<>();
 
-    public String getIngresosEstimados() {
-        return ingresosEstimados;
+    public String getInterpretacionGeneral() {
+        return interpretacionGeneral;
     }
 
-    public void setIngresosEstimados(String ingresosEstimados) {
-        this.ingresosEstimados = ingresosEstimados;
-    }
-
-    public String getCostosPrincipales() {
-        return costosPrincipales;
-    }
-
-    public void setCostosPrincipales(String costosPrincipales) {
-        this.costosPrincipales = costosPrincipales;
-    }
-
-    public String getUtilidadAproximada() {
-        return utilidadAproximada;
-    }
-
-    public void setUtilidadAproximada(String utilidadAproximada) {
-        this.utilidadAproximada = utilidadAproximada;
-    }
-
-    public String getPuntoEquilibrio() {
-        return puntoEquilibrio;
-    }
-
-    public void setPuntoEquilibrio(String puntoEquilibrio) {
-        this.puntoEquilibrio = puntoEquilibrio;
+    public void setInterpretacionGeneral(String interpretacionGeneral) {
+        this.interpretacionGeneral = interpretacionGeneral;
     }
 
     public List<String> getRiesgosFinancieros() {

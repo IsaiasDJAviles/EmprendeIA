@@ -13,17 +13,47 @@
     <div class="page-header">
         <div>
             <h1>Interpretación financiera</h1>
-            <p>Generada por IA a partir de tu formulario guiado. Puedes ajustarla antes de guardar.</p>
+            <p>Generada por IA a partir de las cifras ya calculadas en Finanzas. Puedes ajustarla antes de guardar.</p>
         </div>
         <a class="btn btn-secondary" th:href="@{/dashboard}">Volver</a>
     </div>
 
     <p class="alert alert-error" th:if="${param.error}">
-        No se pudo generar la interpretación financiera (el proveedor de IA no respondió, o el formulario guiado aún no está completo). Intenta de nuevo.
+        No se pudo generar la interpretación financiera (el proveedor de IA no respondió, o todavía no has calculado
+        tus finanzas). Intenta de nuevo.
     </p>
     <p class="alert alert-error" th:if="${errorValidacion}" th:text="${errorValidacion}"></p>
 
-    <div class="card">
+    <div class="empty-state" th:if="${moduloFinanciero == null}">
+        Todavía no has calculado tus finanzas para esta idea.
+        <a th:href="@{/ideas/{id}/finanzas(id=${ideaId})}">Calcúlalas primero</a>.
+    </div>
+
+    <div class="card" th:if="${moduloFinanciero != null}">
+        <h2>Cifras ya calculadas (RF-13)</h2>
+        <table>
+            <tbody>
+            <tr>
+                <th>Ingresos estimados</th>
+                <td th:text="${moduloFinanciero.ingresosEstimados}"></td>
+            </tr>
+            <tr>
+                <th>Costos totales</th>
+                <td th:text="${moduloFinanciero.costosTotales}"></td>
+            </tr>
+            <tr>
+                <th>Utilidad</th>
+                <td th:text="${moduloFinanciero.utilidad}"></td>
+            </tr>
+            <tr>
+                <th>Punto de equilibrio ($)</th>
+                <td th:text="${moduloFinanciero.puntoEquilibrio}"></td>
+            </tr>
+            </tbody>
+        </table>
+    </div>
+
+    <div class="card" style="margin-top: 1rem;" th:if="${moduloFinanciero != null}">
         <form method="post" th:action="@{/ideas/{id}/analisis/mercado/generar(id=${ideaId})}">
             <button type="submit" class="btn btn-primary"
                     th:text="${existe} ? 'Regenerar con IA' : 'Generar con IA'"></button>
@@ -33,27 +63,9 @@
     <div class="card" style="margin-top: 1rem;">
         <form method="post" th:action="@{/ideas/{id}/analisis/mercado(id=${ideaId})}" th:object="${form}">
             <div class="form-group">
-                <label for="ingresosEstimados">Ingresos estimados</label>
-                <textarea id="ingresosEstimados" th:field="*{ingresosEstimados}"></textarea>
-                <p class="field-error" th:if="${#fields.hasErrors('ingresosEstimados')}" th:errors="*{ingresosEstimados}"></p>
-            </div>
-
-            <div class="form-group">
-                <label for="costosPrincipales">Costos principales</label>
-                <textarea id="costosPrincipales" th:field="*{costosPrincipales}"></textarea>
-                <p class="field-error" th:if="${#fields.hasErrors('costosPrincipales')}" th:errors="*{costosPrincipales}"></p>
-            </div>
-
-            <div class="form-group">
-                <label for="utilidadAproximada">Utilidad aproximada</label>
-                <textarea id="utilidadAproximada" th:field="*{utilidadAproximada}"></textarea>
-                <p class="field-error" th:if="${#fields.hasErrors('utilidadAproximada')}" th:errors="*{utilidadAproximada}"></p>
-            </div>
-
-            <div class="form-group">
-                <label for="puntoEquilibrio">Punto de equilibrio</label>
-                <textarea id="puntoEquilibrio" th:field="*{puntoEquilibrio}"></textarea>
-                <p class="field-error" th:if="${#fields.hasErrors('puntoEquilibrio')}" th:errors="*{puntoEquilibrio}"></p>
+                <label for="interpretacionGeneral">Interpretación general de viabilidad</label>
+                <textarea id="interpretacionGeneral" th:field="*{interpretacionGeneral}"></textarea>
+                <p class="field-error" th:if="${#fields.hasErrors('interpretacionGeneral')}" th:errors="*{interpretacionGeneral}"></p>
             </div>
 
             <div class="form-group">

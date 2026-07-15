@@ -4,19 +4,23 @@ import java.util.List;
 
 import org.springframework.stereotype.Component;
 
-import com.emprendeia.model.Formulario;
 import com.emprendeia.model.IdeaNegocio;
+import com.emprendeia.model.ModuloFinanciero;
 import com.emprendeia.model.TipoAnalisis;
 
 /**
  * Arma los 5 prompts parametrizados (uno por {@link TipoAnalisis}) a partir de una
- * {@link IdeaNegocio} y, cuando aplica, su {@link Formulario}.
+ * {@link IdeaNegocio} y, para {@link TipoAnalisis#MERCADO}, del {@link ModuloFinanciero}
+ * ya calculado en Java (RF-13).
  * <p>
  * Los textos base son los del documento guía del proyecto. {@link TipoAnalisis#MERCADO}
  * no tiene, en ese documento, un prompt de "análisis de mercado": el 5to prompt del
- * documento es de "interpretación financiera" (usa {@link Formulario}, no la idea). Por
- * decisión del equipo, ese prompt ocupa el slot MERCADO del enum existente en vez de
- * agregar un valor nuevo al CHECK de {@code analisis_generado}.
+ * documento es de "interpretación financiera". Por decisión del equipo, ese prompt ocupa
+ * el slot MERCADO del enum existente en vez de agregar un valor nuevo al CHECK de
+ * {@code analisis_generado}. A diferencia del prompt original del documento guía (que le
+ * pedía al LLM calcular ingresos/utilidad/punto de equilibrio a partir de datos crudos),
+ * aquí el LLM solo interpreta cifras que ya calculó {@code FinancieroService} con
+ * precisión — nunca las recalcula.
  */
 @Component
 public class PromptBuilder {
@@ -84,17 +88,16 @@ public class PromptBuilder {
             {informacion_del_negocio}""";
 
     private static final String BASE_FINANCIERO = """
-            Actúa como asesor financiero para emprendedores. Interpreta los siguientes datos financieros de manera clara y sencilla.
+            Actúa como asesor financiero para emprendedores. Los siguientes datos financieros ya fueron \
+            calculados con precisión (RF-13); tu tarea es interpretarlos en lenguaje claro y sencillo para \
+            alguien sin formación financiera, NO recalcularlos ni contradecirlos.
 
             Incluye:
-            1. Ingresos estimados.
-            2. Costos principales.
-            3. Utilidad aproximada.
-            4. Punto de equilibrio.
-            5. Riesgos financieros.
-            6. Recomendaciones para mejorar la viabilidad.
+            1. Una interpretación general de la viabilidad del negocio con estos números.
+            2. Riesgos financieros relevantes.
+            3. Recomendaciones para mejorar la viabilidad.
 
-            Datos financieros:
+            Datos financieros ya calculados:
             {datos_financieros}""";
 
     private static final String INSTRUCCION_JSON = """
@@ -149,15 +152,12 @@ public class PromptBuilder {
 
     private static final String SHAPE_FINANCIERO = """
             {
-              "ingresosEstimados": "string",
-              "costosPrincipales": "string",
-              "utilidadAproximada": "string",
-              "puntoEquilibrio": "string",
+              "interpretacionGeneral": "string",
               "riesgosFinancieros": ["string"],
               "recomendacionesViabilidad": ["string"]
             }""";
 
-    public String construir(TipoAnalisis tipo, IdeaNegocio idea, Formulario formulario) {
+    public String construir(TipoAnalisis tipo, IdeaNegocio idea, ModuloFinanciero moduloFinanciero) {
         return switch (tipo) {
             case DIAGNOSTICO -> BASE_DIAGNOSTICO.replace(PLACEHOLDER_NEGOCIO, informacionNegocio(idea))
                     + INSTRUCCION_JSON.formatted(SHAPE_DIAGNOSTICO);
@@ -167,7 +167,7 @@ public class PromptBuilder {
                     + INSTRUCCION_JSON.formatted(SHAPE_FODA);
             case MARKETING -> BASE_MARKETING.replace(PLACEHOLDER_NEGOCIO, informacionNegocio(idea))
                     + INSTRUCCION_JSON.formatted(SHAPE_MARKETING);
-            case MERCADO -> BASE_FINANCIERO.replace(PLACEHOLDER_FINANCIERO, datosFinancieros(formulario))
+            case MERCADO -> BASE_FINANCIERO.replace(PLACEHOLDER_FINANCIERO, datosFinancierosCalculados(moduloFinanciero))
                     + INSTRUCCION_JSON.formatted(SHAPE_FINANCIERO);
         };
     }
@@ -187,8 +187,7 @@ public class PromptBuilder {
                     "recomendacionesEstrategicas");
             case MARKETING -> List.of("publicoObjetivo", "mensajePrincipal", "canalesPromocion",
                     "estrategiasDigitales", "promocionesIniciales", "calendarioBasico", "indicadoresResultados");
-            case MERCADO -> List.of("ingresosEstimados", "costosPrincipales", "utilidadAproximada",
-                    "puntoEquilibrio", "riesgosFinancieros", "recomendacionesViabilidad");
+            case MERCADO -> List.of("interpretacionGeneral", "riesgosFinancieros", "recomendacionesViabilidad");
         };
     }
 
@@ -202,16 +201,12 @@ public class PromptBuilder {
                 + "\nNivel de avance: " + valorODefecto(idea.getNivelAvance());
     }
 
-    private static String datosFinancieros(Formulario formulario) {
-        if (formulario == null) {
-            return "El usuario aún no ha completado el formulario financiero de esta idea.";
-        }
-        return "Inversión inicial: " + formulario.getInversionInicial()
-                + "\nCostos fijos: " + formulario.getCostosFijos()
-                + "\nCostos variables: " + formulario.getCostosVariables()
-                + "\nPrecio de venta: " + formulario.getPrecioVenta()
-                + "\nUnidades estimadas: " + formulario.getUnidadesEstimadas()
-                + "\nDestino de la inversión: " + valorODefecto(formulario.getDestinoInversion());
+    private static String datosFinancierosCalculados(ModuloFinanciero moduloFinanciero) {
+        return "Ingresos estimados: " + moduloFinanciero.getIngresosEstimados()
+                + "\nCostos totales: " + moduloFinanciero.getCostosTotales()
+                + "\nCostos variables: " + moduloFinanciero.getCostosVariables()
+                + "\nUtilidad: " + moduloFinanciero.getUtilidad()
+                + "\nPunto de equilibrio (ingreso necesario para cubrir costos): " + moduloFinanciero.getPuntoEquilibrio();
     }
 
     private static String valorODefecto(String valor) {

@@ -15,12 +15,13 @@ import com.emprendeia.ia.LlmClient;
 import com.emprendeia.ia.PromptBuilder;
 import com.emprendeia.model.AnalisisGenerado;
 import com.emprendeia.model.Estatus;
-import com.emprendeia.model.Formulario;
 import com.emprendeia.model.IdeaNegocio;
+import com.emprendeia.model.ModuloFinanciero;
 import com.emprendeia.model.TipoAnalisis;
 import com.emprendeia.model.Usuario;
 import com.emprendeia.repository.AnalisisGeneradoRepository;
 import com.emprendeia.repository.EstatusRepository;
+import com.emprendeia.repository.ModuloFinancieroRepository;
 
 /**
  * Orquesta la generación y edición de los 5 módulos de análisis (RF-07 a RF-11, RF-14):
@@ -34,6 +35,11 @@ import com.emprendeia.repository.EstatusRepository;
  * JSON es inválido, la excepción sube antes de tocar el repositorio: nada se persiste a
  * medias y ni la idea ni el formulario se ven afectados, así que el usuario puede reintentar
  * sin perder nada (RNF-09).
+ * <p>
+ * Para {@link TipoAnalisis#MERCADO}, el prompt se arma con {@link ModuloFinanciero} (los
+ * valores que {@code FinancieroService} ya calculó en Java, RF-13), no con datos crudos del
+ * formulario — si todavía no existe, {@link #generar} falla rápido con
+ * {@link AnalisisInvalidoException} antes de llamar al LLM.
  */
 @Service
 public class AnalisisService {
@@ -43,18 +49,18 @@ public class AnalisisService {
     private final AnalisisGeneradoRepository analisisGeneradoRepository;
     private final EstatusRepository estatusRepository;
     private final IdeaService ideaService;
-    private final FormularioService formularioService;
+    private final ModuloFinancieroRepository moduloFinancieroRepository;
     private final PromptBuilder promptBuilder;
     private final LlmClient llmClient;
     private final ObjectMapper objectMapper;
 
     public AnalisisService(AnalisisGeneradoRepository analisisGeneradoRepository, EstatusRepository estatusRepository,
-            IdeaService ideaService, FormularioService formularioService, PromptBuilder promptBuilder,
+            IdeaService ideaService, ModuloFinancieroRepository moduloFinancieroRepository, PromptBuilder promptBuilder,
             LlmClient llmClient, ObjectMapper objectMapper) {
         this.analisisGeneradoRepository = analisisGeneradoRepository;
         this.estatusRepository = estatusRepository;
         this.ideaService = ideaService;
-        this.formularioService = formularioService;
+        this.moduloFinancieroRepository = moduloFinancieroRepository;
         this.promptBuilder = promptBuilder;
         this.llmClient = llmClient;
         this.objectMapper = objectMapper;
@@ -67,9 +73,15 @@ public class AnalisisService {
 
     public AnalisisGenerado generar(Long ideaId, TipoAnalisis tipo, Usuario usuario) {
         IdeaNegocio idea = ideaService.obtenerPropia(ideaId, usuario);
-        Formulario formulario = formularioService.obtenerPorIdea(ideaId, usuario).orElse(null);
 
-        String prompt = promptBuilder.construir(tipo, idea, formulario);
+        ModuloFinanciero moduloFinanciero = null;
+        if (tipo == TipoAnalisis.MERCADO) {
+            moduloFinanciero = moduloFinancieroRepository.findByIdeaNegocio(idea)
+                    .orElseThrow(() -> new AnalisisInvalidoException(
+                            "Primero calcula tus finanzas antes de generar la interpretación."));
+        }
+
+        String prompt = promptBuilder.construir(tipo, idea, moduloFinanciero);
         String textoLlm = llmClient.generarAnalisis(prompt);
 
         JsonNode nodo;

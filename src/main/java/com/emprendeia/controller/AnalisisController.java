@@ -29,20 +29,27 @@ import com.emprendeia.model.AnalisisGenerado;
 import com.emprendeia.model.TipoAnalisis;
 import com.emprendeia.security.UsuarioPrincipal;
 import com.emprendeia.service.AnalisisService;
+import com.emprendeia.service.FinancieroService;
 
 /**
  * Muestra y edita los 5 módulos de análisis (RF-07 a RF-11, RF-14). La ruta de visualización
  * y la de generación son genéricas por {@link TipoAnalisis}; el guardado de ediciones necesita
  * un método por módulo porque cada uno bindea un DTO estructurado distinto (ver {@code dto}).
+ * <p>
+ * Para {@link TipoAnalisis#MERCADO} también expone en el modelo el {@code ModuloFinanciero}
+ * ya calculado (RF-13), como contexto de solo lectura junto a la interpretación editable.
  */
 @Controller
 public class AnalisisController {
 
     private final AnalisisService analisisService;
+    private final FinancieroService financieroService;
     private final ObjectMapper objectMapper;
 
-    public AnalisisController(AnalisisService analisisService, ObjectMapper objectMapper) {
+    public AnalisisController(AnalisisService analisisService, FinancieroService financieroService,
+            ObjectMapper objectMapper) {
         this.analisisService = analisisService;
+        this.financieroService = financieroService;
         this.objectMapper = objectMapper;
     }
 
@@ -78,6 +85,8 @@ public class AnalisisController {
                 case MERCADO -> {
                     model.addAttribute("form",
                             actual.map(a -> deserializar(a, MercadoForm.class)).orElseGet(MercadoForm::new));
+                    model.addAttribute("moduloFinanciero",
+                            financieroService.obtenerActual(ideaId, principal.getUsuario()).orElse(null));
                     yield "analisis/mercado";
                 }
                 case MARKETING -> {
@@ -150,6 +159,7 @@ public class AnalisisController {
         if (bindingResult.hasErrors()) {
             model.addAttribute("ideaId", ideaId);
             model.addAttribute("existe", true);
+            agregarModuloFinancieroSiAplica(ideaId, tipo, principal, model);
             return vista;
         }
 
@@ -161,10 +171,19 @@ public class AnalisisController {
             model.addAttribute("ideaId", ideaId);
             model.addAttribute("existe", true);
             model.addAttribute("errorValidacion", ex.getMessage());
+            agregarModuloFinancieroSiAplica(ideaId, tipo, principal, model);
             return vista;
         }
 
         return "redirect:/ideas/" + ideaId + "/analisis/" + tipo.name().toLowerCase(Locale.ROOT);
+    }
+
+    private void agregarModuloFinancieroSiAplica(Long ideaId, TipoAnalisis tipo, UsuarioPrincipal principal,
+            Model model) {
+        if (tipo == TipoAnalisis.MERCADO) {
+            model.addAttribute("moduloFinanciero",
+                    financieroService.obtenerActual(ideaId, principal.getUsuario()).orElse(null));
+        }
     }
 
     private static TipoAnalisis aTipo(String tipoPath) {
