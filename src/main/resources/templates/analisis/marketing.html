@@ -1,0 +1,116 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <title>Plan de marketing - EmprendeIA</title>
+    <link rel="stylesheet" th:href="@{/css/styles.css}">
+</head>
+<body>
+<div th:replace="~{fragments/nav :: nav}"></div>
+
+<div class="page">
+    <div class="page-header">
+        <div>
+            <h1>Plan de marketing</h1>
+            <p>Generado por IA a partir de tu idea de negocio. Puedes ajustarlo antes de guardar.</p>
+        </div>
+        <a class="btn btn-secondary" th:href="@{/dashboard}">Volver</a>
+    </div>
+
+    <p class="alert alert-error" th:if="${param.error}">
+        No se pudo generar el plan de marketing (el proveedor de IA no respondió o devolvió datos incompletos). Intenta de nuevo.
+    </p>
+    <p class="alert alert-error" th:if="${errorValidacion}" th:text="${errorValidacion}"></p>
+
+    <div class="card">
+        <form method="post" th:action="@{/ideas/{id}/analisis/marketing/generar(id=${ideaId})}">
+            <button type="submit" class="btn btn-primary"
+                    th:text="${existe} ? 'Regenerar con IA' : 'Generar con IA'"></button>
+        </form>
+    </div>
+
+    <div class="card" style="margin-top: 1rem;">
+        <form method="post" th:action="@{/ideas/{id}/analisis/marketing(id=${ideaId})}" th:object="${form}">
+            <div class="form-group">
+                <label for="publicoObjetivo">Público objetivo</label>
+                <textarea id="publicoObjetivo" th:field="*{publicoObjetivo}"></textarea>
+                <p class="field-error" th:if="${#fields.hasErrors('publicoObjetivo')}" th:errors="*{publicoObjetivo}"></p>
+            </div>
+
+            <div class="form-group">
+                <label for="mensajePrincipal">Mensaje principal</label>
+                <textarea id="mensajePrincipal" th:field="*{mensajePrincipal}"></textarea>
+                <p class="field-error" th:if="${#fields.hasErrors('mensajePrincipal')}" th:errors="*{mensajePrincipal}"></p>
+            </div>
+
+            <div class="form-group">
+                <label>Canales de promoción</label>
+                <div data-list="canalesPromocion">
+                    <div class="list-row" th:each="valor : *{canalesPromocion}">
+                        <input type="text" name="canalesPromocion" th:value="${valor}">
+                        <button type="button" class="btn btn-secondary" data-list-remove>Quitar</button>
+                    </div>
+                </div>
+                <button type="button" class="btn btn-secondary" data-list-add="canalesPromocion">+ Agregar</button>
+                <p class="field-error" th:if="${#fields.hasErrors('canalesPromocion')}" th:errors="*{canalesPromocion}"></p>
+            </div>
+
+            <div class="form-group">
+                <label>Estrategias digitales</label>
+                <div data-list="estrategiasDigitales">
+                    <div class="list-row" th:each="valor : *{estrategiasDigitales}">
+                        <input type="text" name="estrategiasDigitales" th:value="${valor}">
+                        <button type="button" class="btn btn-secondary" data-list-remove>Quitar</button>
+                    </div>
+                </div>
+                <button type="button" class="btn btn-secondary" data-list-add="estrategiasDigitales">+ Agregar</button>
+                <p class="field-error" th:if="${#fields.hasErrors('estrategiasDigitales')}" th:errors="*{estrategiasDigitales}"></p>
+            </div>
+
+            <div class="form-group">
+                <label>Promociones iniciales</label>
+                <div data-list="promocionesIniciales">
+                    <div class="list-row" th:each="valor : *{promocionesIniciales}">
+                        <input type="text" name="promocionesIniciales" th:value="${valor}">
+                        <button type="button" class="btn btn-secondary" data-list-remove>Quitar</button>
+                    </div>
+                </div>
+                <button type="button" class="btn btn-secondary" data-list-add="promocionesIniciales">+ Agregar</button>
+                <p class="field-error" th:if="${#fields.hasErrors('promocionesIniciales')}" th:errors="*{promocionesIniciales}"></p>
+            </div>
+
+            <div class="form-group">
+                <label>Calendario básico de acciones</label>
+                <div data-list="calendarioBasico">
+                    <div class="list-row" th:each="valor : *{calendarioBasico}">
+                        <input type="text" name="calendarioBasico" th:value="${valor}">
+                        <button type="button" class="btn btn-secondary" data-list-remove>Quitar</button>
+                    </div>
+                </div>
+                <button type="button" class="btn btn-secondary" data-list-add="calendarioBasico">+ Agregar</button>
+                <p class="field-error" th:if="${#fields.hasErrors('calendarioBasico')}" th:errors="*{calendarioBasico}"></p>
+            </div>
+
+            <div class="form-group">
+                <label>Indicadores para medir resultados</label>
+                <div data-list="indicadoresResultados">
+                    <div class="list-row" th:each="valor : *{indicadoresResultados}">
+                        <input type="text" name="indicadoresResultados" th:value="${valor}">
+                        <button type="button" class="btn btn-secondary" data-list-remove>Quitar</button>
+                    </div>
+                </div>
+                <button type="button" class="btn btn-secondary" data-list-add="indicadoresResultados">+ Agregar</button>
+                <p class="field-error" th:if="${#fields.hasErrors('indicadoresResultados')}" th:errors="*{indicadoresResultados}"></p>
+            </div>
+
+            <div class="form-actions">
+                <button type="submit" class="btn btn-primary">Guardar cambios</button>
+            </div>
+        </form>
+    </div>
+</div>
+
+<script th:src="@{/js/analisis.js}" defer></script>
+</body>
+</html>

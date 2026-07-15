@@ -1,0 +1,92 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <title>Interpretación financiera - EmprendeIA</title>
+    <link rel="stylesheet" th:href="@{/css/styles.css}">
+</head>
+<body>
+<div th:replace="~{fragments/nav :: nav}"></div>
+
+<div class="page">
+    <div class="page-header">
+        <div>
+            <h1>Interpretación financiera</h1>
+            <p>Generada por IA a partir de tu formulario guiado. Puedes ajustarla antes de guardar.</p>
+        </div>
+        <a class="btn btn-secondary" th:href="@{/dashboard}">Volver</a>
+    </div>
+
+    <p class="alert alert-error" th:if="${param.error}">
+        No se pudo generar la interpretación financiera (el proveedor de IA no respondió, o el formulario guiado aún no está completo). Intenta de nuevo.
+    </p>
+    <p class="alert alert-error" th:if="${errorValidacion}" th:text="${errorValidacion}"></p>
+
+    <div class="card">
+        <form method="post" th:action="@{/ideas/{id}/analisis/mercado/generar(id=${ideaId})}">
+            <button type="submit" class="btn btn-primary"
+                    th:text="${existe} ? 'Regenerar con IA' : 'Generar con IA'"></button>
+        </form>
+    </div>
+
+    <div class="card" style="margin-top: 1rem;">
+        <form method="post" th:action="@{/ideas/{id}/analisis/mercado(id=${ideaId})}" th:object="${form}">
+            <div class="form-group">
+                <label for="ingresosEstimados">Ingresos estimados</label>
+                <textarea id="ingresosEstimados" th:field="*{ingresosEstimados}"></textarea>
+                <p class="field-error" th:if="${#fields.hasErrors('ingresosEstimados')}" th:errors="*{ingresosEstimados}"></p>
+            </div>
+
+            <div class="form-group">
+                <label for="costosPrincipales">Costos principales</label>
+                <textarea id="costosPrincipales" th:field="*{costosPrincipales}"></textarea>
+                <p class="field-error" th:if="${#fields.hasErrors('costosPrincipales')}" th:errors="*{costosPrincipales}"></p>
+            </div>
+
+            <div class="form-group">
+                <label for="utilidadAproximada">Utilidad aproximada</label>
+                <textarea id="utilidadAproximada" th:field="*{utilidadAproximada}"></textarea>
+                <p class="field-error" th:if="${#fields.hasErrors('utilidadAproximada')}" th:errors="*{utilidadAproximada}"></p>
+            </div>
+
+            <div class="form-group">
+                <label for="puntoEquilibrio">Punto de equilibrio</label>
+                <textarea id="puntoEquilibrio" th:field="*{puntoEquilibrio}"></textarea>
+                <p class="field-error" th:if="${#fields.hasErrors('puntoEquilibrio')}" th:errors="*{puntoEquilibrio}"></p>
+            </div>
+
+            <div class="form-group">
+                <label>Riesgos financieros</label>
+                <div data-list="riesgosFinancieros">
+                    <div class="list-row" th:each="valor : *{riesgosFinancieros}">
+                        <input type="text" name="riesgosFinancieros" th:value="${valor}">
+                        <button type="button" class="btn btn-secondary" data-list-remove>Quitar</button>
+                    </div>
+                </div>
+                <button type="button" class="btn btn-secondary" data-list-add="riesgosFinancieros">+ Agregar</button>
+                <p class="field-error" th:if="${#fields.hasErrors('riesgosFinancieros')}" th:errors="*{riesgosFinancieros}"></p>
+            </div>
+
+            <div class="form-group">
+                <label>Recomendaciones para la viabilidad</label>
+                <div data-list="recomendacionesViabilidad">
+                    <div class="list-row" th:each="valor : *{recomendacionesViabilidad}">
+                        <input type="text" name="recomendacionesViabilidad" th:value="${valor}">
+                        <button type="button" class="btn btn-secondary" data-list-remove>Quitar</button>
+                    </div>
+                </div>
+                <button type="button" class="btn btn-secondary" data-list-add="recomendacionesViabilidad">+ Agregar</button>
+                <p class="field-error" th:if="${#fields.hasErrors('recomendacionesViabilidad')}" th:errors="*{recomendacionesViabilidad}"></p>
+            </div>
+
+            <div class="form-actions">
+                <button type="submit" class="btn btn-primary">Guardar cambios</button>
+            </div>
+        </form>
+    </div>
+</div>
+
+<script th:src="@{/js/analisis.js}" defer></script>
+</body>
+</html>

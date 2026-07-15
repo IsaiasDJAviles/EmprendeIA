@@ -213,6 +213,17 @@ select:focus {
     margin: 0.35rem 0 0;
 }
 
+.list-row {
+    display: flex;
+    align-items: center;
+    gap: var(--space-1);
+    margin-bottom: var(--space-1);
+}
+
+.list-row input {
+    flex: 1;
+}
+
 .form-actions {
     display: flex;
     align-items: center;

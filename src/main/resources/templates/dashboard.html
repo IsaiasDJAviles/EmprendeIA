@@ -32,6 +32,7 @@
                 <th>Sector</th>
                 <th>Nivel de avance</th>
                 <th></th>
+                <th>Análisis</th>
             </tr>
             </thead>
             <tbody>
@@ -40,6 +41,13 @@
                 <td th:text="${idea.sectorMercado}"></td>
                 <td th:text="${idea.nivelAvance}"></td>
                 <td><a th:href="@{/ideas/{id}/formulario(id=${idea.id})}">Formulario guiado →</a></td>
+                <td>
+                    <a th:href="@{/ideas/{id}/analisis/diagnostico(id=${idea.id})}">Diagnóstico</a> ·
+                    <a th:href="@{/ideas/{id}/analisis/canvas(id=${idea.id})}">Canvas</a> ·
+                    <a th:href="@{/ideas/{id}/analisis/foda(id=${idea.id})}">FODA</a> ·
+                    <a th:href="@{/ideas/{id}/analisis/mercado(id=${idea.id})}">Finanzas</a> ·
+                    <a th:href="@{/ideas/{id}/analisis/marketing(id=${idea.id})}">Marketing</a>
+                </td>
             </tr>
             </tbody>
         </table>

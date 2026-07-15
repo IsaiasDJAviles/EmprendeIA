@@ -1,5 +1,7 @@
 package com.emprendeia.ia;
 
+import java.util.List;
+
 import org.springframework.stereotype.Component;
 
 import com.emprendeia.model.Formulario;
@@ -167,6 +169,26 @@ public class PromptBuilder {
                     + INSTRUCCION_JSON.formatted(SHAPE_MARKETING);
             case MERCADO -> BASE_FINANCIERO.replace(PLACEHOLDER_FINANCIERO, datosFinancieros(formulario))
                     + INSTRUCCION_JSON.formatted(SHAPE_FINANCIERO);
+        };
+    }
+
+    /**
+     * Nombres de los campos JSON de nivel superior que la capa de servicio debe validar
+     * como presentes en la respuesta del LLM (RNF-05), en el mismo orden que el shape
+     * correspondiente enviado al modelo.
+     */
+    public List<String> camposEsperados(TipoAnalisis tipo) {
+        return switch (tipo) {
+            case DIAGNOSTICO -> List.of("descripcionGeneral", "problemaQueResuelve", "clienteObjetivo",
+                    "nivelClaridadPropuesta", "principalesRiesgos", "recomendacionesMejora");
+            case CANVAS -> List.of("segmentosClientes", "propuestaValor", "canales", "relacionClientes",
+                    "fuentesIngresos", "recursosClave", "actividadesClave", "sociosClave", "estructuraCostos");
+            case FODA -> List.of("fortalezas", "oportunidades", "debilidades", "amenazas",
+                    "recomendacionesEstrategicas");
+            case MARKETING -> List.of("publicoObjetivo", "mensajePrincipal", "canalesPromocion",
+                    "estrategiasDigitales", "promocionesIniciales", "calendarioBasico", "indicadoresResultados");
+            case MERCADO -> List.of("ingresosEstimados", "costosPrincipales", "utilidadAproximada",
+                    "puntoEquilibrio", "riesgosFinancieros", "recomendacionesViabilidad");
         };
     }
 

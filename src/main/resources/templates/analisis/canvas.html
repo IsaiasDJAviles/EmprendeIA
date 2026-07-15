@@ -1,0 +1,140 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <title>Modelo Canvas - EmprendeIA</title>
+    <link rel="stylesheet" th:href="@{/css/styles.css}">
+</head>
+<body>
+<div th:replace="~{fragments/nav :: nav}"></div>
+
+<div class="page">
+    <div class="page-header">
+        <div>
+            <h1>Modelo Canvas</h1>
+            <p>Generado por IA a partir de tu idea de negocio. Puedes ajustarlo antes de guardar.</p>
+        </div>
+        <a class="btn btn-secondary" th:href="@{/dashboard}">Volver</a>
+    </div>
+
+    <p class="alert alert-error" th:if="${param.error}">
+        No se pudo generar el Canvas (el proveedor de IA no respondió o devolvió datos incompletos). Intenta de nuevo.
+    </p>
+    <p class="alert alert-error" th:if="${errorValidacion}" th:text="${errorValidacion}"></p>
+
+    <div class="card">
+        <form method="post" th:action="@{/ideas/{id}/analisis/canvas/generar(id=${ideaId})}">
+            <button type="submit" class="btn btn-primary"
+                    th:text="${existe} ? 'Regenerar con IA' : 'Generar con IA'"></button>
+        </form>
+    </div>
+
+    <div class="card" style="margin-top: 1rem;">
+        <form method="post" th:action="@{/ideas/{id}/analisis/canvas(id=${ideaId})}" th:object="${form}">
+            <div class="form-group">
+                <label>Segmentos de clientes</label>
+                <div data-list="segmentosClientes">
+                    <div class="list-row" th:each="valor : *{segmentosClientes}">
+                        <input type="text" name="segmentosClientes" th:value="${valor}">
+                        <button type="button" class="btn btn-secondary" data-list-remove>Quitar</button>
+                    </div>
+                </div>
+                <button type="button" class="btn btn-secondary" data-list-add="segmentosClientes">+ Agregar</button>
+                <p class="field-error" th:if="${#fields.hasErrors('segmentosClientes')}" th:errors="*{segmentosClientes}"></p>
+            </div>
+
+            <div class="form-group">
+                <label for="propuestaValor">Propuesta de valor</label>
+                <textarea id="propuestaValor" th:field="*{propuestaValor}"></textarea>
+                <p class="field-error" th:if="${#fields.hasErrors('propuestaValor')}" th:errors="*{propuestaValor}"></p>
+            </div>
+
+            <div class="form-group">
+                <label>Canales</label>
+                <div data-list="canales">
+                    <div class="list-row" th:each="valor : *{canales}">
+                        <input type="text" name="canales" th:value="${valor}">
+                        <button type="button" class="btn btn-secondary" data-list-remove>Quitar</button>
+                    </div>
+                </div>
+                <button type="button" class="btn btn-secondary" data-list-add="canales">+ Agregar</button>
+                <p class="field-error" th:if="${#fields.hasErrors('canales')}" th:errors="*{canales}"></p>
+            </div>
+
+            <div class="form-group">
+                <label for="relacionClientes">Relación con clientes</label>
+                <textarea id="relacionClientes" th:field="*{relacionClientes}"></textarea>
+                <p class="field-error" th:if="${#fields.hasErrors('relacionClientes')}" th:errors="*{relacionClientes}"></p>
+            </div>
+
+            <div class="form-group">
+                <label>Fuentes de ingresos</label>
+                <div data-list="fuentesIngresos">
+                    <div class="list-row" th:each="valor : *{fuentesIngresos}">
+                        <input type="text" name="fuentesIngresos" th:value="${valor}">
+                        <button type="button" class="btn btn-secondary" data-list-remove>Quitar</button>
+                    </div>
+                </div>
+                <button type="button" class="btn btn-secondary" data-list-add="fuentesIngresos">+ Agregar</button>
+                <p class="field-error" th:if="${#fields.hasErrors('fuentesIngresos')}" th:errors="*{fuentesIngresos}"></p>
+            </div>
+
+            <div class="form-group">
+                <label>Recursos clave</label>
+                <div data-list="recursosClave">
+                    <div class="list-row" th:each="valor : *{recursosClave}">
+                        <input type="text" name="recursosClave" th:value="${valor}">
+                        <button type="button" class="btn btn-secondary" data-list-remove>Quitar</button>
+                    </div>
+                </div>
+                <button type="button" class="btn btn-secondary" data-list-add="recursosClave">+ Agregar</button>
+                <p class="field-error" th:if="${#fields.hasErrors('recursosClave')}" th:errors="*{recursosClave}"></p>
+            </div>
+
+            <div class="form-group">
+                <label>Actividades clave</label>
+                <div data-list="actividadesClave">
+                    <div class="list-row" th:each="valor : *{actividadesClave}">
+                        <input type="text" name="actividadesClave" th:value="${valor}">
+                        <button type="button" class="btn btn-secondary" data-list-remove>Quitar</button>
+                    </div>
+                </div>
+                <button type="button" class="btn btn-secondary" data-list-add="actividadesClave">+ Agregar</button>
+                <p class="field-error" th:if="${#fields.hasErrors('actividadesClave')}" th:errors="*{actividadesClave}"></p>
+            </div>
+
+            <div class="form-group">
+                <label>Socios clave</label>
+                <div data-list="sociosClave">
+                    <div class="list-row" th:each="valor : *{sociosClave}">
+                        <input type="text" name="sociosClave" th:value="${valor}">
+                        <button type="button" class="btn btn-secondary" data-list-remove>Quitar</button>
+                    </div>
+                </div>
+                <button type="button" class="btn btn-secondary" data-list-add="sociosClave">+ Agregar</button>
+                <p class="field-error" th:if="${#fields.hasErrors('sociosClave')}" th:errors="*{sociosClave}"></p>
+            </div>
+
+            <div class="form-group">
+                <label>Estructura de costos</label>
+                <div data-list="estructuraCostos">
+                    <div class="list-row" th:each="valor : *{estructuraCostos}">
+                        <input type="text" name="estructuraCostos" th:value="${valor}">
+                        <button type="button" class="btn btn-secondary" data-list-remove>Quitar</button>
+                    </div>
+                </div>
+                <button type="button" class="btn btn-secondary" data-list-add="estructuraCostos">+ Agregar</button>
+                <p class="field-error" th:if="${#fields.hasErrors('estructuraCostos')}" th:errors="*{estructuraCostos}"></p>
+            </div>
+
+            <div class="form-actions">
+                <button type="submit" class="btn btn-primary">Guardar cambios</button>
+            </div>
+        </form>
+    </div>
+</div>
+
+<script th:src="@{/js/analisis.js}" defer></script>
+</body>
+</html>

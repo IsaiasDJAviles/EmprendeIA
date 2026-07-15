@@ -1,0 +1,104 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <title>Análisis FODA - EmprendeIA</title>
+    <link rel="stylesheet" th:href="@{/css/styles.css}">
+</head>
+<body>
+<div th:replace="~{fragments/nav :: nav}"></div>
+
+<div class="page">
+    <div class="page-header">
+        <div>
+            <h1>Análisis FODA</h1>
+            <p>Generado por IA a partir de tu idea de negocio. Puedes ajustarlo antes de guardar.</p>
+        </div>
+        <a class="btn btn-secondary" th:href="@{/dashboard}">Volver</a>
+    </div>
+
+    <p class="alert alert-error" th:if="${param.error}">
+        No se pudo generar el FODA (el proveedor de IA no respondió o devolvió datos incompletos). Intenta de nuevo.
+    </p>
+    <p class="alert alert-error" th:if="${errorValidacion}" th:text="${errorValidacion}"></p>
+
+    <div class="card">
+        <form method="post" th:action="@{/ideas/{id}/analisis/foda/generar(id=${ideaId})}">
+            <button type="submit" class="btn btn-primary"
+                    th:text="${existe} ? 'Regenerar con IA' : 'Generar con IA'"></button>
+        </form>
+    </div>
+
+    <div class="card" style="margin-top: 1rem;">
+        <form method="post" th:action="@{/ideas/{id}/analisis/foda(id=${ideaId})}" th:object="${form}">
+            <div class="form-group">
+                <label>Fortalezas</label>
+                <div data-list="fortalezas">
+                    <div class="list-row" th:each="valor : *{fortalezas}">
+                        <input type="text" name="fortalezas" th:value="${valor}">
+                        <button type="button" class="btn btn-secondary" data-list-remove>Quitar</button>
+                    </div>
+                </div>
+                <button type="button" class="btn btn-secondary" data-list-add="fortalezas">+ Agregar</button>
+                <p class="field-error" th:if="${#fields.hasErrors('fortalezas')}" th:errors="*{fortalezas}"></p>
+            </div>
+
+            <div class="form-group">
+                <label>Oportunidades</label>
+                <div data-list="oportunidades">
+                    <div class="list-row" th:each="valor : *{oportunidades}">
+                        <input type="text" name="oportunidades" th:value="${valor}">
+                        <button type="button" class="btn btn-secondary" data-list-remove>Quitar</button>
+                    </div>
+                </div>
+                <button type="button" class="btn btn-secondary" data-list-add="oportunidades">+ Agregar</button>
+                <p class="field-error" th:if="${#fields.hasErrors('oportunidades')}" th:errors="*{oportunidades}"></p>
+            </div>
+
+            <div class="form-group">
+                <label>Debilidades</label>
+                <div data-list="debilidades">
+                    <div class="list-row" th:each="valor : *{debilidades}">
+                        <input type="text" name="debilidades" th:value="${valor}">
+                        <button type="button" class="btn btn-secondary" data-list-remove>Quitar</button>
+                    </div>
+                </div>
+                <button type="button" class="btn btn-secondary" data-list-add="debilidades">+ Agregar</button>
+                <p class="field-error" th:if="${#fields.hasErrors('debilidades')}" th:errors="*{debilidades}"></p>
+            </div>
+
+            <div class="form-group">
+                <label>Amenazas</label>
+                <div data-list="amenazas">
+                    <div class="list-row" th:each="valor : *{amenazas}">
+                        <input type="text" name="amenazas" th:value="${valor}">
+                        <button type="button" class="btn btn-secondary" data-list-remove>Quitar</button>
+                    </div>
+                </div>
+                <button type="button" class="btn btn-secondary" data-list-add="amenazas">+ Agregar</button>
+                <p class="field-error" th:if="${#fields.hasErrors('amenazas')}" th:errors="*{amenazas}"></p>
+            </div>
+
+            <div class="form-group">
+                <label>Recomendaciones estratégicas</label>
+                <div data-list="recomendacionesEstrategicas">
+                    <div class="list-row" th:each="valor : *{recomendacionesEstrategicas}">
+                        <input type="text" name="recomendacionesEstrategicas" th:value="${valor}">
+                        <button type="button" class="btn btn-secondary" data-list-remove>Quitar</button>
+                    </div>
+                </div>
+                <button type="button" class="btn btn-secondary" data-list-add="recomendacionesEstrategicas">+ Agregar</button>
+                <p class="field-error" th:if="${#fields.hasErrors('recomendacionesEstrategicas')}" th:errors="*{recomendacionesEstrategicas}"></p>
+            </div>
+
+            <div class="form-actions">
+                <button type="submit" class="btn btn-primary">Guardar cambios</button>
+            </div>
+        </form>
+    </div>
+</div>
+
+<script th:src="@{/js/analisis.js}" defer></script>
+</body>
+</html>
