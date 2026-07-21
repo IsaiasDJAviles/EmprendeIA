@@ -12,31 +12,48 @@
         <div class="app-brand">EmprendeIA</div>
         <p class="auth-subtitle">Crea tu cuenta para empezar</p>
 
-        <form th:action="@{/registro}" th:object="${registroForm}" method="post">
+        <form id="form-registro" th:action="@{/registro}" th:object="${registroForm}" method="post" novalidate>
             <div class="form-group">
                 <label for="nombre">Nombre</label>
-                <input type="text" id="nombre" th:field="*{nombre}">
-                <p class="field-error" th:if="${#fields.hasErrors('nombre')}" th:errors="*{nombre}"></p>
+                <input type="text" id="nombre" th:field="*{nombre}" required maxlength="80">
+                <p class="field-error" data-error-for="nombre"
+                   th:if="${#fields.hasErrors('nombre')}" th:errors="*{nombre}"></p>
             </div>
             <div class="form-group">
                 <label for="apellidoPaterno">Apellido paterno</label>
-                <input type="text" id="apellidoPaterno" th:field="*{apellidoPaterno}">
-                <p class="field-error" th:if="${#fields.hasErrors('apellidoPaterno')}" th:errors="*{apellidoPaterno}"></p>
+                <input type="text" id="apellidoPaterno" th:field="*{apellidoPaterno}" required maxlength="80">
+                <p class="field-error" data-error-for="apellidoPaterno"
+                   th:if="${#fields.hasErrors('apellidoPaterno')}" th:errors="*{apellidoPaterno}"></p>
             </div>
             <div class="form-group">
                 <label for="apellidoMaterno">Apellido materno</label>
-                <input type="text" id="apellidoMaterno" th:field="*{apellidoMaterno}">
-                <p class="field-error" th:if="${#fields.hasErrors('apellidoMaterno')}" th:errors="*{apellidoMaterno}"></p>
+                <input type="text" id="apellidoMaterno" th:field="*{apellidoMaterno}" maxlength="80">
+                <p class="field-error" data-error-for="apellidoMaterno"
+                   th:if="${#fields.hasErrors('apellidoMaterno')}" th:errors="*{apellidoMaterno}"></p>
             </div>
             <div class="form-group">
                 <label for="correo">Correo</label>
-                <input type="email" id="correo" th:field="*{correo}">
-                <p class="field-error" th:if="${#fields.hasErrors('correo')}" th:errors="*{correo}"></p>
+                <input type="email" id="correo" th:field="*{correo}" required maxlength="150">
+                <p class="field-error" data-error-for="correo"
+                   th:if="${#fields.hasErrors('correo')}" th:errors="*{correo}"></p>
             </div>
             <div class="form-group">
                 <label for="contrasena">Contraseña</label>
-                <input type="password" id="contrasena" th:field="*{contrasena}">
-                <p class="field-error" th:if="${#fields.hasErrors('contrasena')}" th:errors="*{contrasena}"></p>
+                <input type="password" id="contrasena" th:field="*{contrasena}" required minlength="8" maxlength="72">
+                <ul class="password-checklist">
+                    <li data-requisito="longitud">Mínimo 8 caracteres</li>
+                    <li data-requisito="letra">Al menos una letra</li>
+                    <li data-requisito="numero">Al menos un número</li>
+                </ul>
+                <p class="field-error" data-error-for="contrasena"
+                   th:if="${#fields.hasErrors('contrasena')}" th:errors="*{contrasena}"></p>
+            </div>
+            <div class="form-group">
+                <label for="confirmarContrasena">Confirmar contraseña</label>
+                <input type="password" id="confirmarContrasena" th:field="*{confirmarContrasena}" required
+                       minlength="8" maxlength="72">
+                <p class="field-error" data-error-for="confirmarContrasena"
+                   th:if="${#fields.hasErrors('confirmarContrasena')}" th:errors="*{confirmarContrasena}"></p>
             </div>
             <button type="submit" class="btn btn-primary btn-block">Registrarme</button>
         </form>
@@ -44,5 +61,6 @@
         <p class="auth-footer"><a th:href="@{/login}">Ya tengo cuenta</a></p>
     </div>
 </div>
+<script th:src="@{/js/validacion.js}"></script>
 </body>
 </html>

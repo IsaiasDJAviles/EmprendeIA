@@ -24,7 +24,7 @@ public class AuthController {
 
     @GetMapping("/")
     public String raiz() {
-        return "redirect:/dashboard";
+        return "inicio";
     }
 
     @GetMapping("/login")
@@ -43,6 +43,12 @@ public class AuthController {
     @PostMapping("/registro")
     public String registrar(@Valid @ModelAttribute("registroForm") RegistroForm registroForm,
             BindingResult bindingResult) {
+        if (registroForm.getContrasena() != null
+                && !registroForm.getContrasena().equals(registroForm.getConfirmarContrasena())) {
+            bindingResult.rejectValue("confirmarContrasena", "confirmarContrasena.noCoincide",
+                    "Las contraseñas no coinciden.");
+        }
+
         if (bindingResult.hasErrors()) {
             return "registro";
         }

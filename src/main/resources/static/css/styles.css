@@ -157,6 +157,54 @@ a:hover {
     margin: 0;
 }
 
+/* ---------- Landing pública ---------- */
+
+.landing {
+    max-width: 1040px;
+}
+
+.hero {
+    text-align: center;
+    padding: var(--space-4) var(--space-2) var(--space-3);
+}
+
+.hero h1 {
+    font-size: 2.1rem;
+    max-width: 760px;
+    margin-left: auto;
+    margin-right: auto;
+}
+
+.hero-subtitle {
+    max-width: 640px;
+    margin: 0 auto var(--space-3);
+    color: var(--c-muted);
+    font-size: 1.05rem;
+}
+
+.hero-actions {
+    display: flex;
+    justify-content: center;
+    gap: var(--space-2);
+    flex-wrap: wrap;
+}
+
+.features {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(220px, 1fr));
+    gap: var(--space-3);
+    margin-top: var(--space-3);
+}
+
+.features .card h3 {
+    margin-bottom: var(--space-1);
+}
+
+.features .card p {
+    color: var(--c-muted);
+    margin: 0;
+}
+
 /* ---------- Tarjetas / formularios ---------- */
 
 .card {
@@ -211,6 +259,45 @@ select:focus {
     color: var(--c-accent-hover);
     font-size: 0.85rem;
     margin: 0.35rem 0 0;
+    min-height: 1.1em;
+}
+
+input.invalid {
+    border-color: var(--c-accent-hover);
+}
+
+input.valid {
+    border-color: #3a9a4a;
+}
+
+.password-checklist {
+    list-style: none;
+    margin: 0.5rem 0 0;
+    padding: 0;
+    display: flex;
+    flex-direction: column;
+    gap: 0.25rem;
+}
+
+.password-checklist li {
+    font-size: 0.8rem;
+    color: var(--c-muted);
+    padding-left: 1.2rem;
+    position: relative;
+}
+
+.password-checklist li::before {
+    content: "○";
+    position: absolute;
+    left: 0;
+}
+
+.password-checklist li.cumplido {
+    color: #3a9a4a;
+}
+
+.password-checklist li.cumplido::before {
+    content: "●";
 }
 
 .list-row {

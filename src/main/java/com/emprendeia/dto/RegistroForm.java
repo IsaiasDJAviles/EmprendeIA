@@ -2,6 +2,7 @@ package com.emprendeia.dto;
 
 import jakarta.validation.constraints.Email;
 import jakarta.validation.constraints.NotBlank;
+import jakarta.validation.constraints.Pattern;
 import jakarta.validation.constraints.Size;
 
 public class RegistroForm {
@@ -24,7 +25,12 @@ public class RegistroForm {
 
     @NotBlank
     @Size(min = 8, max = 72)
+    @Pattern(regexp = "^(?=.*[A-Za-z])(?=.*\\d).+$",
+            message = "La contraseña debe incluir al menos una letra y un número.")
     private String contrasena;
+
+    @NotBlank
+    private String confirmarContrasena;
 
     public String getNombre() {
         return nombre;
@@ -64,5 +70,13 @@ public class RegistroForm {
 
     public void setContrasena(String contrasena) {
         this.contrasena = contrasena;
+    }
+
+    public String getConfirmarContrasena() {
+        return confirmarContrasena;
+    }
+
+    public void setConfirmarContrasena(String confirmarContrasena) {
+        this.confirmarContrasena = confirmarContrasena;
     }
 }

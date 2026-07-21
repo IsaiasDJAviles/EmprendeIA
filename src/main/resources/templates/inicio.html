@@ -1,0 +1,56 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org" xmlns:sec="http://www.thymeleaf.org/extras/spring-security">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <title>EmprendeIA - Asistente de IA para planes de negocio</title>
+    <link rel="stylesheet" th:href="@{/css/styles.css}">
+</head>
+<body>
+<header class="app-header">
+    <a class="app-brand" th:href="@{/}">EmprendeIA</a>
+    <nav class="app-nav" sec:authorize="!isAuthenticated()">
+        <a th:href="@{/registro}">Crear cuenta</a>
+        <a class="btn btn-primary" th:href="@{/login}">Iniciar sesión</a>
+    </nav>
+    <nav class="app-nav" sec:authorize="isAuthenticated()">
+        <a class="btn btn-primary" th:href="@{/dashboard}">Ir a mis ideas</a>
+    </nav>
+</header>
+
+<div class="page landing">
+    <section class="hero">
+        <h1>Convierte tu idea en un plan de negocio validado con IA</h1>
+        <p class="hero-subtitle">
+            EmprendeIA es el asistente del Programa Delfín / BUAP que te guía paso a paso para diagnosticar,
+            analizar y estructurar tu idea de negocio, generando cada módulo de tu plan con apoyo de
+            inteligencia artificial.
+        </p>
+        <div class="hero-actions" sec:authorize="!isAuthenticated()">
+            <a class="btn btn-primary" th:href="@{/registro}">Crear una cuenta</a>
+            <a class="btn btn-secondary" th:href="@{/login}">Ya tengo cuenta</a>
+        </div>
+    </section>
+
+    <section class="features">
+        <div class="card">
+            <h3>Diagnóstico</h3>
+            <p>Evalúa el estado actual de tu idea y detecta los puntos que más necesitas fortalecer.</p>
+        </div>
+        <div class="card">
+            <h3>Canvas y FODA</h3>
+            <p>Genera tu modelo de negocio y tu análisis de fortalezas, oportunidades, debilidades y
+                amenazas con apoyo de IA.</p>
+        </div>
+        <div class="card">
+            <h3>Mercado y marketing</h3>
+            <p>Interpreta tu mercado objetivo y define una estrategia de marketing acorde a tu idea.</p>
+        </div>
+        <div class="card">
+            <h3>Módulo financiero</h3>
+            <p>Calcula ingresos, costos y punto de equilibrio a partir de tu formulario guiado.</p>
+        </div>
+    </section>
+</div>
+</body>
+</html>
