@@ -21,32 +21,38 @@
         <form th:action="@{/ideas/{id}/formulario(id=${ideaId})}" th:object="${formularioForm}" method="post">
             <div class="form-group">
                 <label for="inversionInicial">Inversión inicial</label>
+                <p class="field-hint">Cuánto necesitas para arrancar (equipo, mobiliario, etc.), en pesos.</p>
                 <input type="number" step="0.01" id="inversionInicial" th:field="*{inversionInicial}">
                 <p class="field-error" th:if="${#fields.hasErrors('inversionInicial')}" th:errors="*{inversionInicial}"></p>
             </div>
             <div class="form-group">
                 <label for="costosFijos">Costos fijos</label>
+                <p class="field-hint">Costos mensuales que no cambian con tus ventas: renta, sueldos fijos, etc.</p>
                 <input type="number" step="0.01" id="costosFijos" th:field="*{costosFijos}">
                 <p class="field-error" th:if="${#fields.hasErrors('costosFijos')}" th:errors="*{costosFijos}"></p>
             </div>
             <div class="form-group">
                 <label for="costosVariables">Costos variables</label>
+                <p class="field-hint">Costos que sí cambian según cuánto vendas: insumos, materia prima, etc.</p>
                 <input type="number" step="0.01" id="costosVariables" th:field="*{costosVariables}">
                 <p class="field-error" th:if="${#fields.hasErrors('costosVariables')}" th:errors="*{costosVariables}"></p>
             </div>
             <div class="form-group">
                 <label for="precioVenta">Precio de venta</label>
+                <p class="field-hint">El precio al que vendes cada unidad de tu producto o servicio, en pesos.</p>
                 <input type="number" step="0.01" id="precioVenta" th:field="*{precioVenta}">
                 <p class="field-error" th:if="${#fields.hasErrors('precioVenta')}" th:errors="*{precioVenta}"></p>
             </div>
             <div class="form-group">
                 <label for="unidadesEstimadas">Unidades estimadas</label>
+                <p class="field-hint">Cuántas unidades esperas vender al mes.</p>
                 <input type="number" id="unidadesEstimadas" th:field="*{unidadesEstimadas}">
                 <p class="field-error" th:if="${#fields.hasErrors('unidadesEstimadas')}" th:errors="*{unidadesEstimadas}"></p>
             </div>
             <div class="form-group">
                 <label for="destinoInversion">Destino de la inversión</label>
-                <textarea id="destinoInversion" th:field="*{destinoInversion}"></textarea>
+                <p class="field-hint">Sé lo más explícito posible: en qué se usará la inversión inicial. Máximo 300 caracteres.</p>
+                <textarea id="destinoInversion" maxlength="300" th:field="*{destinoInversion}"></textarea>
                 <p class="field-error" th:if="${#fields.hasErrors('destinoInversion')}" th:errors="*{destinoInversion}"></p>
             </div>
             <div class="form-actions">

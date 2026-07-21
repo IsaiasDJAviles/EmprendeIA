@@ -55,6 +55,7 @@
                 <th></th>
                 <th>Análisis</th>
                 <th></th>
+                <th></th>
             </tr>
             </thead>
             <tbody>
@@ -76,8 +77,10 @@
                     <a th:href="@{/ideas/{id}/analisis/foda(id=${idea.id})}">FODA</a> ·
                     <a th:href="@{/ideas/{id}/finanzas(id=${idea.id})}">Finanzas</a> ·
                     <a th:href="@{/ideas/{id}/analisis/mercado(id=${idea.id})}">Interpretación IA</a> ·
-                    <a th:href="@{/ideas/{id}/analisis/marketing(id=${idea.id})}">Marketing</a> ·
-                    <a th:href="@{/ideas/{id}/reporte(id=${idea.id})}">Reporte</a>
+                    <a th:href="@{/ideas/{id}/analisis/marketing(id=${idea.id})}">Marketing</a>
+                </td>
+                <td>
+                    <a class="btn btn-primary" th:href="@{/ideas/{id}/reporte(id=${idea.id})}">Reporte</a>
                 </td>
                 <td>
                     <form method="post" th:action="@{/ideas/{id}/eliminar(id=${idea.id})}"

@@ -226,6 +226,12 @@ label {
     color: var(--c-muted);
 }
 
+.field-hint {
+    margin: 0 0 0.35rem;
+    font-size: 0.8rem;
+    color: var(--c-muted);
+}
+
 input[type="text"],
 input[type="email"],
 input[type="password"],

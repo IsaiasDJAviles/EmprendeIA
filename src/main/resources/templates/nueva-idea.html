@@ -21,41 +21,49 @@
         <form th:action="@{/ideas/nueva}" th:object="${ideaForm}" method="post">
             <div class="form-group">
                 <label for="nombreNegocio">Nombre del negocio</label>
-                <input type="text" id="nombreNegocio" th:field="*{nombreNegocio}">
+                <p class="field-hint">Un nombre corto y claro. Máximo 120 caracteres.</p>
+                <input type="text" id="nombreNegocio" maxlength="120" th:field="*{nombreNegocio}">
                 <p class="field-error" th:if="${#fields.hasErrors('nombreNegocio')}" th:errors="*{nombreNegocio}"></p>
             </div>
             <div class="form-group">
                 <label for="descripcion">Descripción</label>
-                <textarea id="descripcion" th:field="*{descripcion}"></textarea>
+                <p class="field-hint">Sé lo más explícito posible: qué es y qué ofrece tu negocio. Máximo 500 caracteres.</p>
+                <textarea id="descripcion" maxlength="500" th:field="*{descripcion}"></textarea>
                 <p class="field-error" th:if="${#fields.hasErrors('descripcion')}" th:errors="*{descripcion}"></p>
             </div>
             <div class="form-group">
                 <label for="problema">Problema que resuelve</label>
-                <textarea id="problema" th:field="*{problema}"></textarea>
+                <p class="field-hint">¿Qué problema específico resuelve tu idea? Máximo 500 caracteres.</p>
+                <textarea id="problema" maxlength="500" th:field="*{problema}"></textarea>
                 <p class="field-error" th:if="${#fields.hasErrors('problema')}" th:errors="*{problema}"></p>
             </div>
             <div class="form-group">
                 <label for="sectorMercado">Sector / mercado</label>
-                <input type="text" id="sectorMercado" th:field="*{sectorMercado}">
+                <p class="field-hint">Ej. Alimentos y bebidas, tecnología, servicios. Máximo 120 caracteres.</p>
+                <input type="text" id="sectorMercado" maxlength="120" th:field="*{sectorMercado}">
                 <p class="field-error" th:if="${#fields.hasErrors('sectorMercado')}" th:errors="*{sectorMercado}"></p>
             </div>
             <div class="form-group">
                 <label for="clienteObjetivo">Cliente objetivo</label>
-                <input type="text" id="clienteObjetivo" th:field="*{clienteObjetivo}">
+                <p class="field-hint">Describe a quién le vendes: edad, intereses, ubicación. Máximo 300 caracteres.</p>
+                <input type="text" id="clienteObjetivo" maxlength="300" th:field="*{clienteObjetivo}">
                 <p class="field-error" th:if="${#fields.hasErrors('clienteObjetivo')}" th:errors="*{clienteObjetivo}"></p>
             </div>
             <div class="form-group">
                 <label for="tipoOferta">Tipo de oferta</label>
-                <input type="text" id="tipoOferta" th:field="*{tipoOferta}">
+                <p class="field-hint">Ej. Producto, servicio, o ambos. Máximo 60 caracteres.</p>
+                <input type="text" id="tipoOferta" maxlength="60" th:field="*{tipoOferta}">
                 <p class="field-error" th:if="${#fields.hasErrors('tipoOferta')}" th:errors="*{tipoOferta}"></p>
             </div>
             <div class="form-group">
                 <label for="nivelAvance">Nivel de avance</label>
-                <input type="text" id="nivelAvance" th:field="*{nivelAvance}">
+                <p class="field-hint">Ej. Idea inicial, validada, en marcha. Máximo 60 caracteres.</p>
+                <input type="text" id="nivelAvance" maxlength="60" th:field="*{nivelAvance}">
                 <p class="field-error" th:if="${#fields.hasErrors('nivelAvance')}" th:errors="*{nivelAvance}"></p>
             </div>
             <div class="form-group">
                 <label for="idEstado">Estado</label>
+                <p class="field-hint">El estado de la república donde operará tu negocio.</p>
                 <select id="idEstado" th:field="*{idEstado}">
                     <option value="">-- Selecciona --</option>
                     <option th:each="estado : ${estados}" th:value="${estado.id}" th:text="${estado.nombreEstado}"></option>
