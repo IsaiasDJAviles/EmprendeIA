@@ -1,0 +1,51 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <title>Reporte ejecutivo - EmprendeIA</title>
+    <link rel="stylesheet" th:href="@{/css/styles.css}">
+</head>
+<body>
+<div th:replace="~{fragments/nav :: nav}"></div>
+
+<div class="page">
+    <div class="page-header">
+        <div>
+            <h1>Reporte ejecutivo</h1>
+            <p th:text="${idea.nombreNegocio}"></p>
+        </div>
+        <a class="btn btn-secondary" th:href="@{/dashboard}">Volver</a>
+    </div>
+
+    <p class="alert alert-error" th:if="${param.error == 'no-generado'}">
+        Genera el reporte antes de descargarlo.
+    </p>
+
+    <div class="card">
+        <h3 th:if="${reporte == null}">Aún no se ha generado un reporte para esta idea.</h3>
+        <h3 th:if="${reporte != null}"
+            th:text="'Estado actual: ' + ${reporte.estadoReporte.estadoReporte}"></h3>
+
+        <form method="post" th:action="@{/ideas/{id}/reporte/generar(id=${ideaId})}" style="display:inline;">
+            <button type="submit" class="btn btn-primary"
+                    th:text="${reporte == null} ? 'Generar reporte' : 'Regenerar reporte'"></button>
+        </form>
+
+        <a th:if="${reporte != null}" class="btn btn-secondary"
+           th:href="@{/ideas/{id}/reporte/descargar(id=${ideaId})}">Descargar PDF</a>
+    </div>
+
+    <div class="card" style="margin-top: 1rem;">
+        <h3>Secciones disponibles</h3>
+        <ul>
+            <li th:each="seccion : ${secciones}">
+                <span th:text="${seccion.disponible} ? '✓' : '⏳'"></span>
+                <span th:text="${seccion.etiqueta}"></span>
+                <span th:unless="${seccion.disponible}"> — pendiente</span>
+            </li>
+        </ul>
+    </div>
+</div>
+</body>
+</html>
