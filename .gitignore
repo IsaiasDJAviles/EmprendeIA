@@ -34,3 +34,4 @@ build/
 
 ### Scripts locales con credenciales (nunca versionar) ###
 run-local.ps1
+USSERS.txt
