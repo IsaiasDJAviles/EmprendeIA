@@ -12,6 +12,7 @@
 <div class="page">
     <div class="page-header">
         <div>
+            <p th:text="'Bienvenido, ' + ${usuario.nombre}"></p>
             <h1>Mis ideas de negocio</h1>
             <p>Ideas registradas con tu cuenta</p>
         </div>
@@ -20,8 +21,27 @@
 
     <p class="alert alert-error" th:if="${param.error}">La idea solicitada no existe o no te pertenece.</p>
 
-    <div class="empty-state" th:if="${#lists.isEmpty(ideas)}">
+    <div class="card" style="display:flex; align-items:center; gap:1rem; flex-wrap:wrap;">
+        <form method="get" th:action="@{/dashboard}" style="display:flex; gap:0.5rem; flex:1;">
+            <input type="hidden" name="orden" th:value="${orden}">
+            <input type="text" name="busqueda" placeholder="Buscar por nombre..." th:value="${busqueda}">
+            <button type="submit" class="btn btn-secondary">Buscar</button>
+            <a th:if="${busqueda != null and !busqueda.isEmpty()}" class="btn btn-secondary"
+               th:href="@{/dashboard(orden=${orden})}">Limpiar</a>
+        </form>
+
+        <a class="btn btn-secondary" th:if="${orden == 'desc'}"
+           th:href="@{/dashboard(busqueda=${busqueda}, orden='asc')}">Ordenar: más antiguas primero</a>
+        <a class="btn btn-secondary" th:if="${orden == 'asc'}"
+           th:href="@{/dashboard(busqueda=${busqueda}, orden='desc')}">Ordenar: más recientes primero</a>
+    </div>
+
+    <div class="empty-state" th:if="${#lists.isEmpty(ideas) and (busqueda == null or busqueda.isEmpty())}">
         Todavía no tienes ideas registradas. <a th:href="@{/ideas/nueva}">Crea la primera</a>.
+    </div>
+
+    <div class="empty-state" th:if="${#lists.isEmpty(ideas) and busqueda != null and !busqueda.isEmpty()}">
+        No se encontraron ideas con un nombre parecido a "<span th:text="${busqueda}"></span>".
     </div>
 
     <div class="table-wrap" th:unless="${#lists.isEmpty(ideas)}">
@@ -31,15 +51,24 @@
                 <th>Nombre</th>
                 <th>Sector</th>
                 <th>Nivel de avance</th>
+                <th>Fecha de creación</th>
                 <th></th>
                 <th>Análisis</th>
+                <th></th>
             </tr>
             </thead>
             <tbody>
             <tr th:each="idea : ${ideas}">
-                <td th:text="${idea.nombreNegocio}"></td>
+                <td>
+                    <span th:text="${idea.nombreNegocio}"></span>
+                    <span class="badge"
+                          th:if="${busqueda != null and !busqueda.isEmpty() and !#strings.equalsIgnoreCase(idea.nombreNegocio, busqueda)}">
+                        Coincidencia
+                    </span>
+                </td>
                 <td th:text="${idea.sectorMercado}"></td>
                 <td th:text="${idea.nivelAvance}"></td>
+                <td th:text="${#temporals.format(idea.fechaCreacion, 'dd/MM/yyyy')}"></td>
                 <td><a th:href="@{/ideas/{id}/formulario(id=${idea.id})}">Formulario guiado →</a></td>
                 <td>
                     <a th:href="@{/ideas/{id}/analisis/diagnostico(id=${idea.id})}">Diagnóstico</a> ·
@@ -49,6 +78,13 @@
                     <a th:href="@{/ideas/{id}/analisis/mercado(id=${idea.id})}">Interpretación IA</a> ·
                     <a th:href="@{/ideas/{id}/analisis/marketing(id=${idea.id})}">Marketing</a> ·
                     <a th:href="@{/ideas/{id}/reporte(id=${idea.id})}">Reporte</a>
+                </td>
+                <td>
+                    <form method="post" th:action="@{/ideas/{id}/eliminar(id=${idea.id})}"
+                          onsubmit="return confirm('¿Eliminar la idea &quot;' + this.dataset.nombre + '&quot;? Podrás seguir viendo su historial, pero dejará de aparecer en tu lista.');"
+                          th:data-nombre="${idea.nombreNegocio}">
+                        <button type="submit" class="btn btn-secondary">Eliminar</button>
+                    </form>
                 </td>
             </tr>
             </tbody>

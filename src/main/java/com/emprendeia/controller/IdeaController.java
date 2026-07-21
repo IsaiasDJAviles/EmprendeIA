@@ -10,6 +10,7 @@ import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.ModelAttribute;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.bind.annotation.RequestParam;
 
 import com.emprendeia.dto.FormularioForm;
 import com.emprendeia.dto.IdeaForm;
@@ -31,9 +32,27 @@ public class IdeaController {
     }
 
     @GetMapping("/dashboard")
-    public String dashboard(@AuthenticationPrincipal UsuarioPrincipal principal, Model model) {
-        model.addAttribute("ideas", ideaService.listarPorUsuario(principal.getUsuario()));
+    public String dashboard(@AuthenticationPrincipal UsuarioPrincipal principal,
+            @RequestParam(value = "busqueda", required = false) String busqueda,
+            @RequestParam(value = "orden", required = false, defaultValue = "desc") String orden, Model model) {
+        boolean ordenAscendente = "asc".equalsIgnoreCase(orden);
+
+        model.addAttribute("ideas", ideaService.listarPorUsuario(principal.getUsuario(), busqueda, ordenAscendente));
+        model.addAttribute("usuario", principal.getUsuario());
+        model.addAttribute("busqueda", busqueda);
+        model.addAttribute("orden", ordenAscendente ? "asc" : "desc");
         return "dashboard";
+    }
+
+    @PostMapping("/ideas/{id}/eliminar")
+    public String eliminar(@PathVariable("id") Long ideaId, @AuthenticationPrincipal UsuarioPrincipal principal) {
+        try {
+            ideaService.eliminar(ideaId, principal.getUsuario());
+        } catch (IdeaNoEncontradaException ex) {
+            return "redirect:/dashboard?error";
+        }
+
+        return "redirect:/dashboard";
     }
 
     @GetMapping("/ideas/nueva")

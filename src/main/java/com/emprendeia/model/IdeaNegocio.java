@@ -1,5 +1,7 @@
 package com.emprendeia.model;
 
+import java.time.LocalDate;
+
 import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
 import jakarta.persistence.FetchType;
@@ -40,6 +42,9 @@ public class IdeaNegocio {
     @Column(name = "nivel_avance", length = 60)
     private String nivelAvance;
 
+    @Column(name = "fecha_creacion", nullable = false)
+    private LocalDate fechaCreacion;
+
     /**
      * Soft delete transversal (activo/inactivo/eliminado). No confundir con {@link #estado}.
      */
@@ -63,8 +68,8 @@ public class IdeaNegocio {
     }
 
     public IdeaNegocio(String nombreNegocio, String descripcion, String problema, String sectorMercado,
-            String clienteObjetivo, String tipoOferta, String nivelAvance, Estatus estatus, Estado estado,
-            Usuario usuario) {
+            String clienteObjetivo, String tipoOferta, String nivelAvance, LocalDate fechaCreacion, Estatus estatus,
+            Estado estado, Usuario usuario) {
         this.nombreNegocio = nombreNegocio;
         this.descripcion = descripcion;
         this.problema = problema;
@@ -72,6 +77,7 @@ public class IdeaNegocio {
         this.clienteObjetivo = clienteObjetivo;
         this.tipoOferta = tipoOferta;
         this.nivelAvance = nivelAvance;
+        this.fechaCreacion = fechaCreacion;
         this.estatus = estatus;
         this.estado = estado;
         this.usuario = usuario;
@@ -135,6 +141,14 @@ public class IdeaNegocio {
 
     public void setNivelAvance(String nivelAvance) {
         this.nivelAvance = nivelAvance;
+    }
+
+    public LocalDate getFechaCreacion() {
+        return fechaCreacion;
+    }
+
+    public void setFechaCreacion(LocalDate fechaCreacion) {
+        this.fechaCreacion = fechaCreacion;
     }
 
     public Estatus getEstatus() {

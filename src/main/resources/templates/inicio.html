@@ -9,10 +9,6 @@
 <body>
 <header class="app-header">
     <a class="app-brand" th:href="@{/}">EmprendeIA</a>
-    <nav class="app-nav" sec:authorize="!isAuthenticated()">
-        <a th:href="@{/registro}">Crear cuenta</a>
-        <a class="btn btn-primary" th:href="@{/login}">Iniciar sesión</a>
-    </nav>
     <nav class="app-nav" sec:authorize="isAuthenticated()">
         <a class="btn btn-primary" th:href="@{/dashboard}">Ir a mis ideas</a>
     </nav>

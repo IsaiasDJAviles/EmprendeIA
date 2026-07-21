@@ -358,6 +358,18 @@ input.valid {
     width: 100%;
 }
 
+/* ---------- Insignias ---------- */
+
+.badge {
+    display: inline-block;
+    padding: 0.15rem 0.5rem;
+    border-radius: var(--radius);
+    background: var(--c-surface-alt);
+    color: var(--c-muted);
+    font-size: 0.75rem;
+    font-weight: 600;
+}
+
 /* ---------- Alertas ---------- */
 
 .alert {

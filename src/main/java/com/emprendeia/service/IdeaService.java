@@ -1,7 +1,9 @@
 package com.emprendeia.service;
 
+import java.time.LocalDate;
 import java.util.List;
 
+import org.springframework.data.domain.Sort;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
@@ -23,6 +25,7 @@ public class IdeaService {
      * (precondición de datos: no hay script de seed en el repo todavía).
      */
     private static final String ESTATUS_ACTIVO = "ACTIVO";
+    private static final String ESTATUS_INACTIVO = "INACTIVO";
 
     private final IdeaNegocioRepository ideaNegocioRepository;
     private final EstatusRepository estatusRepository;
@@ -53,6 +56,7 @@ public class IdeaService {
                 form.getClienteObjetivo(),
                 form.getTipoOferta(),
                 form.getNivelAvance(),
+                LocalDate.now(),
                 activo,
                 estado,
                 usuario);
@@ -60,12 +64,19 @@ public class IdeaService {
         return ideaNegocioRepository.save(idea);
     }
 
-    public List<IdeaNegocio> listarPorUsuario(Usuario usuario) {
-        return ideaNegocioRepository.findByUsuario(usuario);
+    /**
+     * Ideas activas del usuario (excluye las descartadas por {@link #eliminar}), filtradas por
+     * coincidencia parcial de nombre si {@code busqueda} no está vacía, y ordenadas por fecha de
+     * creación.
+     */
+    public List<IdeaNegocio> listarPorUsuario(Usuario usuario, String busqueda, boolean ordenAscendente) {
+        String patron = (busqueda == null || busqueda.isBlank()) ? "" : busqueda.trim();
+        Sort sort = Sort.by(ordenAscendente ? Sort.Direction.ASC : Sort.Direction.DESC, "fechaCreacion");
+        return ideaNegocioRepository.buscarActivasPorUsuario(usuario, ESTATUS_ACTIVO, patron, sort);
     }
 
     public List<Estado> listarEstadosDisponibles() {
-        return estadoRepository.findAll();
+        return estadoRepository.findAllByOrderByNombreEstadoAsc();
     }
 
     /**
@@ -82,5 +93,23 @@ public class IdeaService {
         }
 
         return idea;
+    }
+
+    /**
+     * Soft delete (RF-17.2): marca la idea como {@code INACTIVO} en vez de borrarla físicamente,
+     * para que {@link #listarPorUsuario} deje de listarla sin perder el historial ni violar el
+     * {@code ON DELETE RESTRICT}/{@code CASCADE} de las tablas hijas.
+     */
+    @Transactional
+    public void eliminar(Long ideaId, Usuario usuario) {
+        IdeaNegocio idea = obtenerPropia(ideaId, usuario);
+        idea.setEstatus(estatusInactivo());
+        ideaNegocioRepository.save(idea);
+    }
+
+    private Estatus estatusInactivo() {
+        return estatusRepository.findByNombreEstatus(ESTATUS_INACTIVO)
+                .orElseThrow(() -> new IllegalStateException(
+                        "El catálogo estatus no tiene una fila con nombre_estatus = '" + ESTATUS_INACTIVO + "'."));
     }
 }
