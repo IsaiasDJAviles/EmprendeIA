@@ -14,3 +14,27 @@ generados a partir de la idea de negocio del usuario. Proyecto para el Programa 
 - OpenPDF (reporte ejecutivo)
 - Docker (despliegue)
 
+## Arquitectura
+
+Documentación
+├──EmprendeIA_SRS.pdf
+├──Manual_Tecnico_EmprendeIA.pdf
+├──Manual_Usuario_EmprendeIA.pdf
+com.emprendeia
+├── EmprendeiaApplication        // arranque Spring Boot
+├── config/                      // SecurityConfig
+├── controller/                  // 5 controladores MVC
+├── dto/                         // formularios y payloads validados
+├── model/                       // entidades JPA (15 tablas)
+├── repository/                  // repositorios Spring Data
+├── service/                     // lógica de negocio + transacciones
+├── security/                    // UserDetailsService + Principal
+├── ia/                          // LlmClient, PromptBuilder, LlmException
+│   └── gemini/                  // GeminiClient, GeminiProperties
+├── report/                      // PdfReportBuilder, DatosReporte
+└── exception/                   // excepciones de dominio
+
+src/main/resources
+├── application.properties       // configuración externalizada
+├── static/css, static/js        // estilos y scripts del cliente
+└── templates/                   // vistas Thymeleaf
