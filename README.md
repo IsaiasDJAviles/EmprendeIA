@@ -14,26 +14,48 @@ generados a partir de la idea de negocio del usuario. Proyecto para el Programa 
 - OpenPDF (reporte ejecutivo)
 - Docker (despliegue)
 
-## Requisitos
+## Arquitectura
 
-- Java 24
-- PostgreSQL
-- Una API key de Gemini ([Google AI Studio](https://aistudio.google.com/apikey))
+Documentación
 
-## Correr en local
+├──EmprendeIA_SRS.pdf
 
-1. Crea la base de datos y corre, en orden, `db/EmprendeIA_BD.sql` y `db/emprendeia_roles.sql`.
-2. Exporta estas variables de entorno:
+├──Manual_Tecnico_EmprendeIA.pdf
 
-   | Variable | Descripción |
-   |---|---|
-   | `DB_HOST` / `DB_PORT` / `DB_NAME` | Conexión a Postgres (default `localhost:5432/emprendeia`) |
-   | `DB_APP_USERNAME` / `DB_APP_PASSWORD` | Credenciales del rol `emprendeia_app` |
-   | `GEMINI_API_KEY` | API key de Gemini |
+├──Manual_Usuario_EmprendeIA.pdf
 
-3. `./mvnw spring-boot:run`
+com.emprendeia
 
-## Despliegue
+├── EmprendeiaApplication        // arranque Spring Boot
 
-Incluye `Dockerfile` (build multi-etapa) listo para Render u otro proveedor que soporte Docker.
-Mismas variables de entorno que en local, más `DB_SSLMODE=require`.
+├── config/                      // SecurityConfig
+
+├── controller/                  // 5 controladores MVC
+
+├── dto/                         // formularios y payloads validados
+
+├── model/                       // entidades JPA (15 tablas)
+
+├── repository/                  // repositorios Spring Data
+
+├── service/                     // lógica de negocio + transacciones
+
+├── security/                    // UserDetailsService + Principal
+
+├── ia/                          // LlmClient, PromptBuilder, LlmException
+
+│   └── gemini/                  // GeminiClient, GeminiProperties
+
+├── report/                      // PdfReportBuilder, DatosReporte
+
+└── exception/                   // excepciones de dominio
+
+
+src/main/resources
+
+├── application.properties       // configuración externalizada
+
+├── static/css, static/js        // estilos y scripts del cliente
+
+└── templates/                   // vistas Thymeleaf
+
